@@ -1,4 +1,5 @@
-﻿using ToDo.Extensibility;
+﻿using System.Collections.Generic;
+using ToDo.Extensibility;
 using ToDo.Extensibility.Dto;
 
 namespace ToDo.Service
@@ -15,6 +16,26 @@ namespace ToDo.Service
         public int CreateToDoItem(ToDoDto toDoDto)
         {
             return toDoRepository.Create(toDoDto);
+        }
+
+        public IEnumerable<ToDoDto> GetAll()
+        {
+            return toDoRepository.GetAll();
+        }
+
+        public ToDoDto GetToDoItemById(int id)
+        {
+            return toDoRepository.GetToDoItemById(id);
+        }
+
+        public void UpdateToDoItem(ToDoDto toDoDto)
+        {
+            toDoRepository.Update(toDoDto);
+        }
+
+        public void DeleteToDoItem(int id)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
