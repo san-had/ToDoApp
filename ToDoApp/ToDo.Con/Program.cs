@@ -12,8 +12,7 @@ namespace ToDo.Con
         {
             var toDo = new ToDoDto
             {
-                Description = "First ToDo",
-                IsCompleted = false
+                Description = "Fifth ToDo"
             };
             Console.WriteLine(WriteToDoRecord(toDo));
         }
