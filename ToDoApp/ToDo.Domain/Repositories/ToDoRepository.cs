@@ -27,9 +27,21 @@ namespace ToDo.Domain.Repositories
             return toDo.Id;
         }
 
-        public IEnumerable<ToDoDto> GetAll()
+        public IEnumerable<ToDoDto> GetAll(FilterDto filter)
         {
-            foreach (var toDoDbModel in dbContext.ToDos)
+            IQueryable<ToDoDbModel> toDbModels = dbContext.ToDos;
+
+            if (!string.IsNullOrEmpty(filter.DescriptionFilter))
+            {
+                toDbModels = toDbModels.Where(t => t.Description.StartsWith(filter.DescriptionFilter));
+            }
+
+            if (filter.IsCompletedFilter.HasValue)
+            {
+                toDbModels = toDbModels.Where(t => t.IsCompleted == filter.IsCompletedFilter.Value);
+            }
+
+            foreach (var toDoDbModel in toDbModels)
             {
                 yield return toDoEntityConverter.Convert(toDoDbModel);
             }
@@ -46,6 +58,13 @@ namespace ToDo.Domain.Repositories
             var toDoDbModel = dbContext.ToDos.FirstOrDefault(t => t.Id == toDoDto.Id);
             toDoDbModel.Description = toDoDto.Description;
             toDoDbModel.IsCompleted = toDoDto.IsCompleted;
+            dbContext.SaveChanges();
+        }
+
+        public void Delete(int id)
+        {
+            var toDoDbModel = dbContext.ToDos.FirstOrDefault(t => t.Id == id);
+            dbContext.Remove(toDoDbModel);
             dbContext.SaveChanges();
         }
     }

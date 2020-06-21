@@ -22,13 +22,21 @@ namespace ToDo.Con
             //};
             //Console.WriteLine(CreateToDoRecord(toDo));
 
-            //DisplayToDos(GetAll());
-            DisplayToDo(toDoService.GetToDoItemById(3));
+            var filter = new FilterDto
+            {
+                //DescriptionFilter = "First",
+                //IsCompletedFilter = true
+            };
 
-            var toDo = toDoService.GetToDoItemById(3);
-            toDo.IsCompleted = false;
-            toDoService.UpdateToDoItem(toDo);
-            DisplayToDo(toDoService.GetToDoItemById(3));
+            DisplayToDos(GetAll(filter));
+            //toDoService.DeleteToDoItem(3);
+            //DisplayToDo(toDoService.GetToDoItemById(3));
+
+            //var toDo = toDoService.GetToDoItemById(1);
+            //toDo.IsCompleted = true;
+            //toDoService.UpdateToDoItem(toDo);
+            //DisplayToDo(toDoService.GetToDoItemById(3));
+            //DisplayToDos(GetAll());
         }
 
         private static void Init()
@@ -43,9 +51,9 @@ namespace ToDo.Con
             return toDoService.CreateToDoItem(toDo);
         }
 
-        private static IEnumerable<ToDoDto> GetAll()
+        private static IEnumerable<ToDoDto> GetAll(FilterDto filter)
         {
-            return toDoService.GetAll();
+            return toDoService.GetAll(filter);
         }
 
         private static void DisplayToDos(IEnumerable<ToDoDto> toDoDtos)

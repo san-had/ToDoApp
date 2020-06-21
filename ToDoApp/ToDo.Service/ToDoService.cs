@@ -18,9 +18,9 @@ namespace ToDo.Service
             return toDoRepository.Create(toDoDto);
         }
 
-        public IEnumerable<ToDoDto> GetAll()
+        public IEnumerable<ToDoDto> GetAll(FilterDto filter)
         {
-            return toDoRepository.GetAll();
+            return toDoRepository.GetAll(filter);
         }
 
         public ToDoDto GetToDoItemById(int id)
@@ -35,7 +35,7 @@ namespace ToDo.Service
 
         public void DeleteToDoItem(int id)
         {
-            throw new System.NotImplementedException();
+            toDoRepository.Delete(id);
         }
     }
 }

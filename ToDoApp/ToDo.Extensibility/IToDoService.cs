@@ -7,7 +7,7 @@ namespace ToDo.Extensibility
     {
         int CreateToDoItem(ToDoDto toDoDto);
 
-        IEnumerable<ToDoDto> GetAll();
+        IEnumerable<ToDoDto> GetAll(FilterDto filter);
 
         ToDoDto GetToDoItemById(int id);
 
