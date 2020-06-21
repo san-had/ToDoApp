@@ -1,8 +1,19 @@
-﻿@{
-    ViewData["Title"] = "ToDo list";
+﻿@using ToDo.Extensibility.Dto;
+@model IEnumerable<ToDoDto>
+@{
+    ViewData["Title"] = "All ToDos";
 }
 
-<div class="text-center">
-    <h1 class="display-4">ToDo list</h1>
-    <p></p>
+<div class="row">
+    <div class="col-md-12">
+        <h2>Tasks: </h2>
+        <ul>
+            @foreach (var toDo in Model)
+            {
+                <li>
+                    <span>Id: @toDo.Id  </span><span>Description: @toDo.Description  </span><span>Completed: @toDo.IsCompleted ? "Yes" : "No"</span>
+                </li>
+            }
+        </ul>
+    </div>
 </div>
