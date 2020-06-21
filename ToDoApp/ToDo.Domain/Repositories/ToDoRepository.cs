@@ -27,7 +27,7 @@ namespace ToDo.Domain.Repositories
             return toDo.Id;
         }
 
-        public IEnumerable<ToDoDto> GetAll(FilterDto filter)
+        public IEnumerable<ToDoDto> GetAll(FilterDto filter, PagingDto paging)
         {
             IQueryable<ToDoDbModel> toDbModels = dbContext.ToDos;
 
@@ -41,7 +41,7 @@ namespace ToDo.Domain.Repositories
                 toDbModels = toDbModels.Where(t => t.IsCompleted == filter.IsCompletedFilter.Value);
             }
 
-            foreach (var toDoDbModel in toDbModels)
+            foreach (var toDoDbModel in toDbModels.Skip(paging.PageNumber * paging.PageSize).Take(paging.PageSize))
             {
                 yield return toDoEntityConverter.Convert(toDoDbModel);
             }

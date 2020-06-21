@@ -16,11 +16,11 @@ namespace ToDo.Con
         {
             Init();
 
-            //var toDo = new ToDoDto
-            //{
-            //    Description = "Fifth ToDo"
-            //};
-            //Console.WriteLine(CreateToDoRecord(toDo));
+            var toDo = new ToDoDto
+            {
+                Description = "Eleventh ToDo"
+            };
+            Console.WriteLine(CreateToDoRecord(toDo));
 
             var filter = new FilterDto
             {
@@ -28,7 +28,13 @@ namespace ToDo.Con
                 //IsCompletedFilter = true
             };
 
-            DisplayToDos(GetAll(filter));
+            var paging = new PagingDto
+            {
+                PageSize = 5,
+                PageNumber = 1
+            };
+
+            DisplayToDos(GetAll(filter, paging));
             //toDoService.DeleteToDoItem(3);
             //DisplayToDo(toDoService.GetToDoItemById(3));
 
@@ -51,9 +57,9 @@ namespace ToDo.Con
             return toDoService.CreateToDoItem(toDo);
         }
 
-        private static IEnumerable<ToDoDto> GetAll(FilterDto filter)
+        private static IEnumerable<ToDoDto> GetAll(FilterDto filter, PagingDto paging)
         {
-            return toDoService.GetAll(filter);
+            return toDoService.GetAll(filter, paging);
         }
 
         private static void DisplayToDos(IEnumerable<ToDoDto> toDoDtos)

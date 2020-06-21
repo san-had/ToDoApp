@@ -18,9 +18,9 @@ namespace ToDo.Service
             return toDoRepository.Create(toDoDto);
         }
 
-        public IEnumerable<ToDoDto> GetAll(FilterDto filter)
+        public IEnumerable<ToDoDto> GetAll(FilterDto filter, PagingDto paging)
         {
-            return toDoRepository.GetAll(filter);
+            return toDoRepository.GetAll(filter, paging);
         }
 
         public ToDoDto GetToDoItemById(int id)
