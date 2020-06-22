@@ -26,12 +26,41 @@ namespace ToDo.UI.Controllers
 
             var paging = new PagingDto
             {
-                PageSize = 5,
-                PageNumber = 1
+                PageSize = 25,
+                PageNumber = 0
             };
 
             var toDos = toDoService.GetAll(filter, paging);
             return View(toDos);
+        }
+
+        public IActionResult Edit(int id)
+        {
+            var toDo = toDoService.GetToDoItemById(id);
+            if (toDo == null)
+            {
+                return NotFound();
+            }
+            return View(toDo);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(ToDoDto toDo)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    toDoService.UpdateToDoItem(toDo);
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch (System.Exception)
+            {
+                ModelState.AddModelError(string.Empty, "An error occured saving task");
+            }
+
+            return View("Index");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

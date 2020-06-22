@@ -4,19 +4,27 @@
     ViewData["Title"] = "All ToDos";
 }
 
-<div class="row">
-    <div class="col-md-12">
-        <h2>Tasks: </h2>
-        <ul>
+<div class="table-responsive">
+    <table class="table table-striped todo">
+        <thead>
+            <tr>
+                <th>Task</th>
+                <th>Completed</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
             @foreach (var toDo in Model)
             {
-                <li>
-                    @{
-                        string isCompleted = toDo.IsCompleted ? "Yes" : "No";
-                    }
-                    <span>Id: @toDo.Id  </span><span>Description: @toDo.Description  </span><span>Completed: @isCompleted</span>
-                </li>
+                string isCompleted = toDo.IsCompleted ? "Yes" : "No";
+                <tr>
+                    <td>@toDo.Description</td>
+                    <td>@isCompleted</td>
+                    <td><a asp-action="Edit" asp-route-id="@toDo.Id" class="btn btn-outline-primary">Edit</a></td>
+                    <td><a asp-action="Delete" asp-route-id="@toDo.Id" class="btn btn-outline-danger">Delete</a></td>
+                </tr>
             }
-        </ul>
-    </div>
+        </tbody>
+    </table>
 </div>
