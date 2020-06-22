@@ -11,7 +11,10 @@
             @foreach (var toDo in Model)
             {
                 <li>
-                    <span>Id: @toDo.Id  </span><span>Description: @toDo.Description  </span><span>Completed: @toDo.IsCompleted ? "Yes" : "No"</span>
+                    @{
+                        string isCompleted = toDo.IsCompleted ? "Yes" : "No";
+                    }
+                    <span>Id: @toDo.Id  </span><span>Description: @toDo.Description  </span><span>Completed: @isCompleted</span>
                 </li>
             }
         </ul>

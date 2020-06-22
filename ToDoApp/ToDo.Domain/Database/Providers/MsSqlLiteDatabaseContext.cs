@@ -13,13 +13,13 @@ namespace ToDo.Domain.Database.Providers
         public DbSet<ToDoDbModel> ToDos { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
-                => options.UseSqlite($"Data Source={GetDbFilePath()}");
+         => options.UseSqlite($"Data Source={GetDbFilePath()}");
 
         private string GetDbFilePath()
         {
             string dbFileFullDirectory = Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.Parent.FullName, dbFileDirectory);
             string dbFilePath = Path.Combine(dbFileFullDirectory, dbFileName);
-            return dbFilePath;
+            return dbFilePath = @"D:\GittHub\ToDoApp\ToDoApp\ToDo.Domain\todo.db";
         }
     }
 }
