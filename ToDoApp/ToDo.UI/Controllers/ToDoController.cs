@@ -63,6 +63,12 @@ namespace ToDo.UI.Controllers
             return View("Index");
         }
 
+        public IActionResult Delete(int id)
+        {
+            toDoService.DeleteToDoItem(id);
+            return RedirectToAction(nameof(Index));
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
