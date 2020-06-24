@@ -34,6 +34,29 @@ namespace ToDo.UI.Controllers
             return View(toDos);
         }
 
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create(ToDoDto toDoDto)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    int id = toDoService.CreateToDoItem(toDoDto);
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch (System.Exception)
+            {
+                ModelState.AddModelError(string.Empty, "An error occured saving the recipe");
+            }
+            return View(nameof(Index));
+        }
+
         public IActionResult Edit(int id)
         {
             var toDo = toDoService.GetToDoItemById(id);
