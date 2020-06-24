@@ -10,28 +10,48 @@ namespace ToDo.UI.Controllers
     public class ToDoController : Controller
     {
         private readonly IToDoService toDoService;
+        private readonly PagingDto paging;
 
         public ToDoController(IToDoService toDoService)
         {
             this.toDoService = toDoService;
-        }
-
-        public IActionResult Index()
-        {
-            var filter = new FilterDto
-            {
-                //DescriptionFilter = "First",
-                //IsCompletedFilter = true
-            };
-
-            var paging = new PagingDto
+            paging = new PagingDto
             {
                 PageSize = 25,
                 PageNumber = 0
             };
+        }
 
+        public IActionResult Index()
+        {
+            var filter = new FilterDto();
             var toDos = toDoService.GetAll(filter, paging);
             return View(toDos);
+        }
+
+        public IActionResult Search()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Search(FilterDto filter)
+        {
+            IEnumerable<ToDoDto> toDos;
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    toDos = toDoService.GetAll(filter, paging);
+                    //return RedirectToAction(nameof(Index));
+                    return View(nameof(Index), toDos);
+                }
+            }
+            catch (System.Exception)
+            {
+                ModelState.AddModelError(string.Empty, "An error occured parsing filter object.");
+            }
+            return View(nameof(Index));
         }
 
         public IActionResult Create()
@@ -52,7 +72,7 @@ namespace ToDo.UI.Controllers
             }
             catch (System.Exception)
             {
-                ModelState.AddModelError(string.Empty, "An error occured saving the recipe");
+                ModelState.AddModelError(string.Empty, "An error occured saving task.");
             }
             return View(nameof(Index));
         }
