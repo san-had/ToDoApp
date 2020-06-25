@@ -1,4 +1,4 @@
-﻿@model ToDo.Extensibility.Dto.FilterDto
+﻿@model FilterViewModel
 @{
     ViewData["Title"] = "Find Task(s)";
 }
@@ -16,7 +16,15 @@
         <div class="col-sm-offset-2 col-sm-10">
             <div class="checkbox">
                 <label class="control-label"></label>
-                <input asp-for="IsCompletedFilter.Value" /> Completed?
+                <input asp-for="IsCompletedFilter" /> Completed?
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <div class="checkbox">
+                <label class="control-label"></label>
+                <input asp-for="Both" /> Both
             </div>
         </div>
     </div>

@@ -35,15 +35,20 @@ namespace ToDo.UI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Search(FilterDto filter)
+        public IActionResult Search(FilterViewModel filterViewModel)
         {
+            var filter = new FilterDto
+            {
+                DescriptionFilter = filterViewModel.DescriptionFilter,
+                IsCompletedFilter = filterViewModel.Both ? default(bool?) : filterViewModel.IsCompletedFilter
+            };
+
             IEnumerable<ToDoDto> toDos;
             try
             {
                 if (ModelState.IsValid)
                 {
                     toDos = toDoService.GetAll(filter, paging);
-                    //return RedirectToAction(nameof(Index));
                     return View(nameof(Index), toDos);
                 }
             }
