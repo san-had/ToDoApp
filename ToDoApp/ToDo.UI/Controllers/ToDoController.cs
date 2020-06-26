@@ -26,7 +26,24 @@ namespace ToDo.UI.Controllers
         {
             var filter = new FilterDto();
             var toDos = toDoService.GetAll(filter, paging);
-            return View(toDos);
+            var viewModel = new ToDoItemListViewModel();
+            var toDoItemViewList = new List<ToDoItemViewModel>();
+            viewModel.PagerObj = new Pager()
+            {
+                PageNumber = 0
+            };
+            foreach (var toDo in toDos)
+            {
+                var toDoItemViewModel = new ToDoItemViewModel()
+                {
+                    Id = toDo.Id,
+                    Description = toDo.Description,
+                    IsCompleted = toDo.IsCompleted
+                };
+                toDoItemViewList.Add(toDoItemViewModel);
+            }
+            viewModel.ToDoItemViewList = toDoItemViewList;
+            return View(viewModel);
         }
 
         public IActionResult Search()

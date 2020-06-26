@@ -1,5 +1,4 @@
-﻿@using ToDo.Extensibility.Dto;
-@model IEnumerable<ToDoDto>
+﻿@model ToDoItemListViewModel
 @{
     ViewData["Title"] = "All ToDos";
 }
@@ -15,7 +14,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var toDo in Model)
+            @foreach (var toDo in Model.ToDoItemViewList)
             {
                 string isCompleted = toDo.IsCompleted ? "Yes" : "No";
                 <tr>
