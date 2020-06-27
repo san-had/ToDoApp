@@ -17,7 +17,7 @@ namespace ToDo.UI.Controllers
             this.toDoService = toDoService;
             paging = new PagingDto
             {
-                PageSize = 25,
+                PageSize = 5,
                 PageNumber = 0
             };
         }
@@ -25,25 +25,15 @@ namespace ToDo.UI.Controllers
         public IActionResult Index()
         {
             var filter = new FilterDto();
-            var toDos = toDoService.GetAll(filter, paging);
-            var viewModel = new ToDoItemListViewModel();
-            var toDoItemViewList = new List<ToDoItemViewModel>();
-            viewModel.PagerObj = new Pager()
-            {
-                PageNumber = 0
-            };
-            foreach (var toDo in toDos)
-            {
-                var toDoItemViewModel = new ToDoItemViewModel()
-                {
-                    Id = toDo.Id,
-                    Description = toDo.Description,
-                    IsCompleted = toDo.IsCompleted
-                };
-                toDoItemViewList.Add(toDoItemViewModel);
-            }
-            viewModel.ToDoItemViewList = toDoItemViewList;
-            return View(viewModel);
+            return View(GetToDoList(filter, paging.PageNumber = 0));
+        }
+
+        [HttpPost]
+        public IActionResult Index(int currentPageIndex)
+        {
+            var filter = new FilterDto();
+            var model = GetToDoList(filter, currentPageIndex);
+            return View(model);
         }
 
         public IActionResult Search()
@@ -60,13 +50,12 @@ namespace ToDo.UI.Controllers
                 IsCompletedFilter = filterViewModel.Both ? default(bool?) : filterViewModel.IsCompletedFilter
             };
 
-            IEnumerable<ToDoDto> toDos;
             try
             {
                 if (ModelState.IsValid)
                 {
-                    toDos = toDoService.GetAll(filter, paging);
-                    return View(nameof(Index), toDos);
+                    var model = GetToDoList(filter, 0);
+                    return View(nameof(Index), model);
                 }
             }
             catch (System.Exception)
@@ -138,6 +127,20 @@ namespace ToDo.UI.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        private ToDoItemListViewModel GetToDoList(FilterDto filter, int currentPage)
+        {
+            paging.PageNumber = currentPage;
+            var toDos = toDoService.GetAll(filter, paging);
+            var toDoItemViewList = ConvertToViewModel(toDos);
+
+            var viewModel = new ToDoItemListViewModel();
+            viewModel.ToDoItemViewList = toDoItemViewList;
+            viewModel.PageCount = 3;
+            viewModel.CurrentPage = currentPage;
+
+            return viewModel;
         }
 
         private List<ToDoItemViewModel> ConvertToViewModel(IEnumerable<ToDoDto> toDos)

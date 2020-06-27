@@ -6,6 +6,8 @@ namespace ToDo.UI.Models
     {
         public List<ToDoItemViewModel> ToDoItemViewList { get; set; }
 
-        public Pager PagerObj { get; set; }
+        public int CurrentPage { get; set; }
+
+        public int PageCount { get; set; }
     }
 }
