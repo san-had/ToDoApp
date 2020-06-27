@@ -29,17 +29,7 @@ namespace ToDo.Domain.Repositories
 
         public IEnumerable<ToDoDto> GetAll(FilterDto filter, PagingDto paging)
         {
-            IQueryable<ToDoDbModel> toDbModels = dbContext.ToDos;
-
-            if (!string.IsNullOrEmpty(filter.DescriptionFilter))
-            {
-                toDbModels = toDbModels.Where(t => t.Description.StartsWith(filter.DescriptionFilter));
-            }
-
-            if (filter.IsCompletedFilter.HasValue)
-            {
-                toDbModels = toDbModels.Where(t => t.IsCompleted == filter.IsCompletedFilter.Value);
-            }
+            IQueryable<ToDoDbModel> toDbModels = FilterToDoDbModel(filter);
 
             foreach (var toDoDbModel in toDbModels.Skip(paging.PageNumber * paging.PageSize).Take(paging.PageSize))
             {
@@ -66,6 +56,30 @@ namespace ToDo.Domain.Repositories
             var toDoDbModel = dbContext.ToDos.FirstOrDefault(t => t.Id == id);
             dbContext.Remove(toDoDbModel);
             dbContext.SaveChanges();
+        }
+
+        public int GetAllRecordCount(FilterDto filter)
+        {
+            IQueryable<ToDoDbModel> toDbModels = FilterToDoDbModel(filter);
+
+            return toDbModels.Count();
+        }
+
+        private IQueryable<ToDoDbModel> FilterToDoDbModel(FilterDto filter)
+        {
+            IQueryable<ToDoDbModel> toDbModels = dbContext.ToDos;
+
+            if (!string.IsNullOrEmpty(filter.DescriptionFilter))
+            {
+                toDbModels = toDbModels.Where(t => t.Description.StartsWith(filter.DescriptionFilter));
+            }
+
+            if (filter.IsCompletedFilter.HasValue)
+            {
+                toDbModels = toDbModels.Where(t => t.IsCompleted == filter.IsCompletedFilter.Value);
+            }
+
+            return toDbModels;
         }
     }
 }

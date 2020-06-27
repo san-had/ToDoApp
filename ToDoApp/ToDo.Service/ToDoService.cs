@@ -37,5 +37,10 @@ namespace ToDo.Service
         {
             toDoRepository.Delete(id);
         }
+
+        public int GetAllRecordCount(FilterDto filter)
+        {
+            return toDoRepository.GetAllRecordCount(filter);
+        }
     }
 }

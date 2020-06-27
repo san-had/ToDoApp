@@ -9,5 +9,11 @@ namespace ToDo.UI.Models
         public int CurrentPage { get; set; }
 
         public int PageCount { get; set; }
+
+        public string DescriptionFilter { get; set; }
+
+        public bool IsCompletedFilter { get; set; }
+
+        public bool BothFilter { get; set; }
     }
 }

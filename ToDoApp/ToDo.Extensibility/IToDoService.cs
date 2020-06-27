@@ -9,6 +9,8 @@ namespace ToDo.Extensibility
 
         IEnumerable<ToDoDto> GetAll(FilterDto filter, PagingDto paging);
 
+        int GetAllRecordCount(FilterDto filter);
+
         ToDoDto GetToDoItemById(int id);
 
         void UpdateToDoItem(ToDoDto toDoDto);
