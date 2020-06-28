@@ -9,7 +9,7 @@ namespace ToDo.UI.Controllers
 {
     public class ToDoController : Controller
     {
-        private const int PageSize = 5;
+        private const int PageSize = 25;
         private const int StartPageIndex = 0;
 
         private readonly IToDoService toDoService;
