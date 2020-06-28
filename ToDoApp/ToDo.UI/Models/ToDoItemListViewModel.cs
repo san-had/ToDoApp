@@ -14,6 +14,6 @@ namespace ToDo.UI.Models
 
         public bool IsCompletedFilter { get; set; }
 
-        public bool BothFilter { get; set; }
+        public bool? BothFilter { get; set; }
     }
 }

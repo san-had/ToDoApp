@@ -9,29 +9,31 @@ namespace ToDo.UI.Controllers
 {
     public class ToDoController : Controller
     {
+        private const int PageSize = 5;
+        private const int StartPageIndex = 0;
+
         private readonly IToDoService toDoService;
-        private readonly PagingDto paging;
 
         public ToDoController(IToDoService toDoService)
         {
             this.toDoService = toDoService;
-            paging = new PagingDto
-            {
-                PageSize = 5,
-                PageNumber = 0
-            };
         }
 
         public IActionResult Index()
         {
             var filter = new FilterDto();
-            return View(GetToDoList(filter, paging.PageNumber = 0));
+            return View(GetToDoList(filter, StartPageIndex));
         }
 
         [HttpPost]
-        public IActionResult Index(int currentPageIndex)
+        public IActionResult Index(int currentPageIndex, ToDoItemListViewModel itemListViewModel)
         {
-            var filter = new FilterDto();
+            var filter = new FilterDto()
+            {
+                DescriptionFilter = itemListViewModel.DescriptionFilter,
+                IsCompletedFilter = itemListViewModel.IsCompletedFilter,
+                BothFilter = itemListViewModel.BothFilter
+            };
             var model = GetToDoList(filter, currentPageIndex);
             return View(model);
         }
@@ -47,14 +49,15 @@ namespace ToDo.UI.Controllers
             var filter = new FilterDto
             {
                 DescriptionFilter = filterViewModel.DescriptionFilter,
-                IsCompletedFilter = filterViewModel.Both ? default(bool?) : filterViewModel.IsCompletedFilter
+                IsCompletedFilter = filterViewModel.IsCompletedFilter,
+                BothFilter = filterViewModel.BothFilter
             };
 
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var model = GetToDoList(filter, 0);
+                    var model = GetToDoList(filter, StartPageIndex);
                     return View(nameof(Index), model);
                 }
             }
@@ -131,15 +134,22 @@ namespace ToDo.UI.Controllers
 
         private ToDoItemListViewModel GetToDoList(FilterDto filter, int currentPage)
         {
-            paging.PageNumber = currentPage;
+            var paging = new PagingDto
+            {
+                PageSize = PageSize,
+                PageNumber = currentPage
+            };
+
             var toDos = toDoService.GetAll(filter, paging);
             var toDoItemViewList = ConvertToViewModel(toDos);
 
             var viewModel = new ToDoItemListViewModel();
             viewModel.ToDoItemViewList = toDoItemViewList;
             int recordCount = toDoService.GetAllRecordCount(filter);
-            viewModel.PageCount = GetPageCount(recordCount, paging.PageSize);
-
+            viewModel.PageCount = GetPageCount(recordCount, PageSize);
+            viewModel.DescriptionFilter = filter.DescriptionFilter;
+            viewModel.IsCompletedFilter = filter.IsCompletedFilter;
+            viewModel.BothFilter = filter.BothFilter;
             viewModel.CurrentPage = currentPage;
 
             return viewModel;

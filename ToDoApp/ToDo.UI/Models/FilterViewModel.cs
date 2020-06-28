@@ -6,6 +6,6 @@
 
         public bool IsCompletedFilter { get; set; }
 
-        public bool Both { get; set; }
+        public bool BothFilter { get; set; }
     }
 }

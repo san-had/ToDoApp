@@ -74,9 +74,9 @@ namespace ToDo.Domain.Repositories
                 toDbModels = toDbModels.Where(t => t.Description.StartsWith(filter.DescriptionFilter));
             }
 
-            if (filter.IsCompletedFilter.HasValue)
+            if (filter.BothFilter.HasValue && !filter.BothFilter.Value)
             {
-                toDbModels = toDbModels.Where(t => t.IsCompleted == filter.IsCompletedFilter.Value);
+                toDbModels = toDbModels.Where(t => t.IsCompleted == filter.IsCompletedFilter);
             }
 
             return toDbModels;
