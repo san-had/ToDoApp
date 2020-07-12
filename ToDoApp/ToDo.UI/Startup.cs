@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ToDo.Domain.Migrations;
 using ToDo.Extensibility.Dto;
 
 namespace ToDo.UI
@@ -45,6 +46,8 @@ namespace ToDo.UI
                     name: "default",
                     template: "{controller=ToDo}/{action=Index}/{id?}");
             });
+
+            app.UpdateSchema();
         }
     }
 }
