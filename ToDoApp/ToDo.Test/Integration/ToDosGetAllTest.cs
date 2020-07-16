@@ -14,15 +14,21 @@ namespace ToDo.Test.Integration
     public class ToDosGetAllTest
     {
         private StandardKernel kernel = new StandardKernel();
+        private IOptionsSnapshot<ConfigurationSettings> fakeOptionsSnapShot;
 
-        [TestCase]
-        public void GetToDosFromContext()
+        [SetUp]
+        public void TestInitialize()
         {
             kernel.Load<ServiceNinjectModule>();
             kernel.Load<DomainNinjectModule>();
             kernel.Bind<IOptionsSnapshot<ConfigurationSettings>>().To<FakeOptionsSnapShot>();
 
-            var fakeOptionsSnapShot = kernel.Get<IOptionsSnapshot<ConfigurationSettings>>();
+            fakeOptionsSnapShot = kernel.Get<IOptionsSnapshot<ConfigurationSettings>>();
+        }
+
+        [TestCase]
+        public void GetToDosFromContext()
+        {
             using (var context = new MsSqlLiteDatabaseContext(fakeOptionsSnapShot))
             {
                 context.Database.OpenConnection();
@@ -52,7 +58,7 @@ namespace ToDo.Test.Integration
         }
     }
 
-    public class FakeOptionsSnapShot : IOptionsSnapshot<ConfigurationSettings>
+    internal class FakeOptionsSnapShot : IOptionsSnapshot<ConfigurationSettings>
     {
         public ConfigurationSettings Value => new ConfigurationSettings
         {
