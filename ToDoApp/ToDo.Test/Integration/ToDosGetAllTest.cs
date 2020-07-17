@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Moq;
 using Ninject;
 using NUnit.Framework;
 using ToDo.Domain;
@@ -14,26 +15,28 @@ namespace ToDo.Test.Integration
     public class ToDosGetAllTest
     {
         private StandardKernel kernel = new StandardKernel();
-        private IOptionsSnapshot<ConfigurationSettings> fakeOptionsSnapShot;
+
+        private Mock<IOptionsSnapshot<ConfigurationSettings>> optionsSnapShotMock;
 
         [SetUp]
         public void TestInitialize()
         {
             kernel.Load<ServiceNinjectModule>();
             kernel.Load<DomainNinjectModule>();
-            kernel.Bind<IOptionsSnapshot<ConfigurationSettings>>().To<FakeOptionsSnapShot>();
 
-            fakeOptionsSnapShot = kernel.Get<IOptionsSnapshot<ConfigurationSettings>>();
+            optionsSnapShotMock = new Mock<IOptionsSnapshot<ConfigurationSettings>>();
+            kernel.Bind<IOptionsSnapshot<ConfigurationSettings>>().ToConstant(optionsSnapShotMock.Object);
+            optionsSnapShotMock.SetupGet(m => m.Value).Returns(new ConfigurationSettings { SqlLiteDbFilePath = ":memory:" });
         }
 
-        [TestCase]
+        [TestCase(TestName = "Get ToDo item by Id")]
         public void GetToDosFromContext()
         {
-            using (var context = new MsSqlLiteDatabaseContext(fakeOptionsSnapShot))
+            using (var context = new MsSqlLiteDatabaseContext(optionsSnapShotMock.Object))
             {
                 context.Database.OpenConnection();
 
-                bool isDbExists = context.Database.EnsureCreated();
+                context.Database.EnsureCreated();
 
                 context.ToDos.AddRange(
                     new Domain.Database.Model.ToDoDbModel { Id = 1, Description = "First Task", IsCompleted = false },
@@ -55,22 +58,6 @@ namespace ToDo.Test.Integration
 
                 context.Database.CloseConnection();
             }
-        }
-    }
-
-    internal class FakeOptionsSnapShot : IOptionsSnapshot<ConfigurationSettings>
-    {
-        public ConfigurationSettings Value => new ConfigurationSettings
-        {
-            SqlLiteDbFilePath = ":memory:"
-        };
-
-        public ConfigurationSettings Get(string name)
-        {
-            return new ConfigurationSettings
-            {
-                SqlLiteDbFilePath = ":memory:"
-            };
         }
     }
 }
