@@ -69,12 +69,17 @@ namespace ToDo.Domain.Repositories
         {
             IQueryable<ToDoDbModel> toDbModels = dbContext.ToDos;
 
-            if (!string.IsNullOrEmpty(filter.DescriptionFilter))
+            if (filter == null)
+            {
+                return toDbModels;
+            }
+
+            if (!string.IsNullOrEmpty(filter?.DescriptionFilter))
             {
                 toDbModels = toDbModels.Where(t => t.Description.StartsWith(filter.DescriptionFilter));
             }
 
-            if (filter.BothFilter.HasValue && !filter.BothFilter.Value)
+            if (!filter.BothFilter.HasValue || filter.BothFilter.HasValue && !filter.BothFilter.Value)
             {
                 toDbModels = toDbModels.Where(t => t.IsCompleted == filter.IsCompletedFilter);
             }
