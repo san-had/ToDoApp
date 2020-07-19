@@ -2,11 +2,8 @@
 using System.Diagnostics;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using Moq;
 using Ninject;
 using NUnit.Framework;
-using ToDo.Domain;
 using ToDo.Domain.Converters;
 using ToDo.Domain.Database.Model;
 using ToDo.Domain.Database.Providers;
@@ -16,27 +13,29 @@ using ToDo.Service;
 
 namespace ToDo.Test.Integration
 {
-    public class ToDosGetAllTest
+    public class ToDosGetAllTest : GetAllTestBase
     {
-        private static readonly List<List<ToDoDbModel>> sourceListForPaging = new List<List<ToDoDbModel>>()
+        private static readonly List<ToDoDbModel> toDosForContextLoading = new List<ToDoDbModel>()
         {
-            {
-                new List<ToDoDbModel>
-                {
-                    new ToDoDbModel { Id = 1, Description = "First Task", IsCompleted = false },
-                    new ToDoDbModel { Id = 2, Description = "Second Task", IsCompleted = false },
-                    new ToDoDbModel { Id = 3, Description = "Third Task", IsCompleted = false },
-                    new ToDoDbModel { Id = 4, Description = "Fourth Task", IsCompleted = false },
-                    new ToDoDbModel { Id = 5, Description = "Fifth Task", IsCompleted = false },
-                    new ToDoDbModel { Id = 6, Description = "Sixth Task", IsCompleted = false },
-                    new ToDoDbModel { Id = 7, Description = "Seventh Task", IsCompleted = false },
-                    new ToDoDbModel { Id = 8, Description = "Eighth Task", IsCompleted = false },
-                    new ToDoDbModel { Id = 9, Description = "Nineth Task", IsCompleted = false },
-                    new ToDoDbModel { Id = 10, Description = "Tenth Task", IsCompleted = false },
-                    new ToDoDbModel { Id = 11, Description = "Eleventh Task", IsCompleted = false },
-                    new ToDoDbModel { Id = 12, Description = "Twelveth Task", IsCompleted = false }
-                }
-            }
+            new ToDoDbModel { Id = 1, Description = "First Task", IsCompleted = false },
+            new ToDoDbModel { Id = 2, Description = "Second Task", IsCompleted = false },
+            new ToDoDbModel { Id = 3, Description = "Third Task", IsCompleted = false }
+        };
+
+        private static readonly List<ToDoDbModel> toDosForPaging = new List<ToDoDbModel>()
+        {
+            new ToDoDbModel { Id = 1, Description = "First Task", IsCompleted = false },
+            new ToDoDbModel { Id = 2, Description = "Second Task", IsCompleted = false },
+            new ToDoDbModel { Id = 3, Description = "Third Task", IsCompleted = false },
+            new ToDoDbModel { Id = 4, Description = "Fourth Task", IsCompleted = false },
+            new ToDoDbModel { Id = 5, Description = "Fifth Task", IsCompleted = false },
+            new ToDoDbModel { Id = 6, Description = "Sixth Task", IsCompleted = false },
+            new ToDoDbModel { Id = 7, Description = "Seventh Task", IsCompleted = false },
+            new ToDoDbModel { Id = 8, Description = "Eighth Task", IsCompleted = false },
+            new ToDoDbModel { Id = 9, Description = "Nineth Task", IsCompleted = false },
+            new ToDoDbModel { Id = 10, Description = "Tenth Task", IsCompleted = false },
+            new ToDoDbModel { Id = 11, Description = "Eleventh Task", IsCompleted = false },
+            new ToDoDbModel { Id = 12, Description = "Twelveth Task", IsCompleted = false }
         };
 
         private static readonly List<ToDoDbModel> toDosForFiltering = new List<ToDoDbModel>()
@@ -71,41 +70,12 @@ namespace ToDo.Test.Integration
             new object[] { 12, 1, 0, new FilterDto { BothFilter = false, DescriptionFilter = "F", IsCompletedFilter = true } },
         };
 
-        private StandardKernel kernel = new StandardKernel();
-
-        private Mock<IOptionsSnapshot<ConfigurationSettings>> optionsSnapShotMock;
-
-        [OneTimeSetUp]
-        public void TestInitialize()
-        {
-            kernel.Load<ServiceNinjectModule>();
-            kernel.Load<DomainNinjectModule>();
-
-            optionsSnapShotMock = new Mock<IOptionsSnapshot<ConfigurationSettings>>();
-            kernel.Bind<IOptionsSnapshot<ConfigurationSettings>>().ToConstant(optionsSnapShotMock.Object);
-            optionsSnapShotMock.SetupGet(m => m.Value).Returns(new ConfigurationSettings { SqlLiteDbFilePath = ":memory:" });
-        }
-
         [TestCase(TestName = "Get ToDo item by Id")]
         public void GetToDosFromContext()
         {
             using (var context = new MsSqlLiteDatabaseContext(optionsSnapShotMock.Object))
             {
-                context.Database.OpenConnection();
-
-                context.Database.EnsureCreated();
-
-                context.ToDos.AddRange(
-                    new ToDoDbModel { Id = 1, Description = "First Task", IsCompleted = false },
-                    new ToDoDbModel { Id = 2, Description = "Second Task", IsCompleted = false },
-                    new ToDoDbModel { Id = 3, Description = "Third Task", IsCompleted = false }
-                    );
-                context.SaveChanges();
-
-                var toDoRepository = new ToDoRepository(context, kernel.Get<IToDoEntityConverter>());
-
-                var toDoService = new ToDoService(toDoRepository);
-
+                var toDoService = GetToDoService(context, toDosForContextLoading);
                 var toDo = toDoService.GetToDoItemById(id: 2);
 
                 Assert.IsNotNull(toDo);
@@ -117,25 +87,20 @@ namespace ToDo.Test.Integration
             }
         }
 
-        [Test(Description = "Multiple page test"), TestCaseSource(nameof(sourceListForPaging))]
-        public void GetAllPagingTest(List<ToDoDbModel> toDos)
+        [TestCase(TestName = "Multiple page test")]
+        public void GetAllPagingTest()
         {
             using (var context = new MsSqlLiteDatabaseContext(optionsSnapShotMock.Object))
             {
-                context.Database.OpenConnection();
-                context.Database.EnsureCreated();
-                context.ToDos.AddRange(toDos);
-                context.SaveChanges();
-
-                var toDoRepository = new ToDoRepository(context, kernel.Get<IToDoEntityConverter>());
-                var toDoService = new ToDoService(toDoRepository);
-
+                var toDoService = GetToDoService(context, toDosForPaging);
                 var paging = new PagingDto { PageNumber = 2, PageSize = 5 };
 
                 int expectedToDosCount = 2;
                 int actualToDosCount = toDoService.GetAll(null, paging).Count();
 
                 Assert.AreEqual(expectedToDosCount, actualToDosCount);
+
+                context.Database.CloseConnection();
             }
         }
 
@@ -144,14 +109,7 @@ namespace ToDo.Test.Integration
         {
             using (var context = new MsSqlLiteDatabaseContext(optionsSnapShotMock.Object))
             {
-                context.Database.OpenConnection();
-                context.Database.EnsureCreated();
-                context.ToDos.AddRange(toDosForFiltering);
-                context.SaveChanges();
-
-                var toDoRepository = new ToDoRepository(context, kernel.Get<IToDoEntityConverter>());
-                var toDoService = new ToDoService(toDoRepository);
-
+                var toDoService = GetToDoService(context, toDosForFiltering);
                 var paging = new PagingDto { PageNumber = pageNumber, PageSize = 5 };
 
                 int actualCount = toDoService.GetAll(filter, paging).Count();
@@ -159,7 +117,20 @@ namespace ToDo.Test.Integration
                 Assert.AreEqual(expectedCount, actualCount);
 
                 Debug.WriteLine($"TestCase row {rowNumber} completed.");
+
+                context.Database.CloseConnection();
             }
+        }
+
+        private ToDoService GetToDoService(MsSqlLiteDatabaseContext context, List<ToDoDbModel> toDos)
+        {
+            context.Database.OpenConnection();
+            context.Database.EnsureCreated();
+            context.ToDos.AddRange(toDos);
+            context.SaveChanges();
+
+            var toDoRepository = new ToDoRepository(context, kernel.Get<IToDoEntityConverter>());
+            return new ToDoService(toDoRepository);
         }
     }
 }
