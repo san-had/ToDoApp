@@ -51,14 +51,16 @@ namespace ToDo.UI.Services
             var toDos = toDoService.GetAll(filter, paging);
             var toDoItemViewList = ConvertToViewModel(toDos);
 
-            var viewModel = new ToDoItemListViewModel();
-            viewModel.ToDoItemViewList = toDoItemViewList;
             int recordCount = toDoService.GetAllRecordCount(filter);
-            viewModel.PageCount = toDoService.GetPageCount(recordCount, pageSize);
-            viewModel.DescriptionFilter = filter.DescriptionFilter;
-            viewModel.IsCompletedFilter = filter.IsCompletedFilter;
-            viewModel.BothFilter = filter.BothFilter;
-            viewModel.CurrentPage = currentPage;
+            var viewModel = new ToDoItemListViewModel
+            {
+                ToDoItemViewList = toDoItemViewList,
+                PageCount = toDoService.GetPageCount(recordCount, pageSize),
+                DescriptionFilter = filter.DescriptionFilter,
+                IsCompletedFilter = filter.IsCompletedFilter,
+                BothFilter = filter.BothFilter,
+                CurrentPage = currentPage
+            };
 
             return viewModel;
         }

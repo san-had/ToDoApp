@@ -33,7 +33,7 @@ namespace ToDo.UI.Controllers
             {
                 DescriptionFilter = itemListViewModel.DescriptionFilter,
                 IsCompletedFilter = itemListViewModel.IsCompletedFilter,
-                BothFilter = itemListViewModel.BothFilter.HasValue ? itemListViewModel.BothFilter.Value : true
+                BothFilter = itemListViewModel.BothFilter ?? true
             };
             var model = viewModelService.GetToDoList(filter, currentPageIndex);
             return View(model);

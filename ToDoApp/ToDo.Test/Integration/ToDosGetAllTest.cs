@@ -73,53 +73,47 @@ namespace ToDo.Test.Integration
         [TestCase(TestName = "Get ToDo item by Id")]
         public void GetToDosFromContext()
         {
-            using (var context = new MsSqlLiteDatabaseContext(optionsSnapShotMock.Object))
-            {
-                var toDoService = GetToDoService(context, toDosForContextLoading);
-                var toDo = toDoService.GetToDoItemById(id: 2);
+            using MsSqlLiteDatabaseContext context = new MsSqlLiteDatabaseContext(optionsSnapShotMock.Object);
+            var toDoService = GetToDoService(context, toDosForContextLoading);
+            var toDo = toDoService.GetToDoItemById(id: 2);
 
-                Assert.IsNotNull(toDo);
-                Assert.AreEqual(2, toDo.Id);
-                Assert.AreEqual("Second Task", toDo.Description);
-                Assert.IsFalse(toDo.IsCompleted);
+            Assert.IsNotNull(toDo);
+            Assert.AreEqual(2, toDo.Id);
+            Assert.AreEqual("Second Task", toDo.Description);
+            Assert.IsFalse(toDo.IsCompleted);
 
-                context.Database.CloseConnection();
-            }
+            context.Database.CloseConnection();
         }
 
         [TestCase(TestName = "Multiple page test")]
         public void GetAllPagingTest()
         {
-            using (var context = new MsSqlLiteDatabaseContext(optionsSnapShotMock.Object))
-            {
-                var toDoService = GetToDoService(context, toDosForPaging);
-                var paging = new PagingDto { PageNumber = 2, PageSize = 5 };
+            using MsSqlLiteDatabaseContext context = new MsSqlLiteDatabaseContext(optionsSnapShotMock.Object);
+            var toDoService = GetToDoService(context, toDosForPaging);
+            var paging = new PagingDto { PageNumber = 2, PageSize = 5 };
 
-                int expectedToDosCount = 2;
-                int actualToDosCount = toDoService.GetAll(null, paging).Count();
+            int expectedToDosCount = 2;
+            int actualToDosCount = toDoService.GetAll(null, paging).Count();
 
-                Assert.AreEqual(expectedToDosCount, actualToDosCount);
+            Assert.AreEqual(expectedToDosCount, actualToDosCount);
 
-                context.Database.CloseConnection();
-            }
+            context.Database.CloseConnection();
         }
 
         [Test(Description = "Filtering test"), TestCaseSource(nameof(sourceListForFiltering))]
         public void GetAllFilteringTest(int rowNumber, int expectedCount, int pageNumber, FilterDto filter)
         {
-            using (var context = new MsSqlLiteDatabaseContext(optionsSnapShotMock.Object))
-            {
-                var toDoService = GetToDoService(context, toDosForFiltering);
-                var paging = new PagingDto { PageNumber = pageNumber, PageSize = 5 };
+            using MsSqlLiteDatabaseContext context = new MsSqlLiteDatabaseContext(optionsSnapShotMock.Object);
+            var toDoService = GetToDoService(context, toDosForFiltering);
+            var paging = new PagingDto { PageNumber = pageNumber, PageSize = 5 };
 
-                int actualCount = toDoService.GetAll(filter, paging).Count();
+            int actualCount = toDoService.GetAll(filter, paging).Count();
 
-                Assert.AreEqual(expectedCount, actualCount);
+            Assert.AreEqual(expectedCount, actualCount);
 
-                Debug.WriteLine($"TestCase row {rowNumber} completed.");
+            Debug.WriteLine($"TestCase row {rowNumber} completed.");
 
-                context.Database.CloseConnection();
-            }
+            context.Database.CloseConnection();
         }
 
         private ToDoService GetToDoService(MsSqlLiteDatabaseContext context, List<ToDoDbModel> toDos)

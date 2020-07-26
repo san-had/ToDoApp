@@ -9,10 +9,10 @@ namespace ToDo.Con
 {
     internal class Program
     {
-        private static StandardKernel kernel = new StandardKernel();
+        private static readonly StandardKernel kernel = new StandardKernel();
         private static ToDoService toDoService;
 
-        private static void Main(string[] args)
+        private static void Main()
         {
             Init();
 
@@ -41,7 +41,7 @@ namespace ToDo.Con
             //var toDo = toDoService.GetToDoItemById(1);
             //toDo.IsCompleted = true;
             //toDoService.UpdateToDoItem(toDo);
-            //DisplayToDo(toDoService.GetToDoItemById(3));
+            DisplayToDo(toDoService.GetToDoItemById(3));
             //DisplayToDos(GetAll());
         }
 
