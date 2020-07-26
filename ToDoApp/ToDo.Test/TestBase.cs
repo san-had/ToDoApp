@@ -8,9 +8,9 @@ using ToDo.Domain;
 using ToDo.Extensibility.Dto;
 using ToDo.Service;
 
-namespace ToDo.Test.Integration
+namespace ToDo.Test
 {
-    public class GetAllTestBase : IDisposable
+    public class TestBase : IDisposable
     {
         private bool disposed = false;
 

@@ -145,7 +145,8 @@ namespace ToDo.UI.Controllers
 
             var viewModel = new ToDoItemListViewModel();
             viewModel.ToDoItemViewList = toDoItemViewList;
-            viewModel.PageCount = toDoService.GetPageCount(filter, PageSize);
+            int recordCount = toDoService.GetAllRecordCount(filter);
+            viewModel.PageCount = toDoService.GetPageCount(recordCount, PageSize);
             viewModel.DescriptionFilter = filter.DescriptionFilter;
             viewModel.IsCompletedFilter = filter.IsCompletedFilter;
             viewModel.BothFilter = filter.BothFilter;

@@ -13,7 +13,7 @@ using ToDo.Service;
 
 namespace ToDo.Test.Integration
 {
-    public class ToDosGetAllTest : GetAllTestBase
+    public class ToDosGetAllTest : TestBase
     {
         private static readonly List<ToDoDbModel> toDosForContextLoading = new List<ToDoDbModel>()
         {

@@ -9,7 +9,9 @@ namespace ToDo.Extensibility
 
         IEnumerable<ToDoDto> GetAll(FilterDto filter, PagingDto paging);
 
-        int GetPageCount(FilterDto filter, int pageSize);
+        int GetAllRecordCount(FilterDto filter);
+
+        int GetPageCount(int recordCount, int pageSize);
 
         ToDoDto GetToDoItemById(int id);
 

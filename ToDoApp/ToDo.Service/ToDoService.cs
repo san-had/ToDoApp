@@ -38,9 +38,8 @@ namespace ToDo.Service
             toDoRepository.Delete(id);
         }
 
-        public int GetPageCount(FilterDto filter, int pageSize)
+        public int GetPageCount(int recordCount, int pageSize)
         {
-            int recordCount = GetAllRecordCount(filter);
             int pageCount = recordCount / pageSize;
             if (recordCount % pageSize != 0)
             {
@@ -50,7 +49,7 @@ namespace ToDo.Service
             return pageCount;
         }
 
-        private int GetAllRecordCount(FilterDto filter)
+        public int GetAllRecordCount(FilterDto filter)
         {
             return toDoRepository.GetAllRecordCount(filter);
         }
