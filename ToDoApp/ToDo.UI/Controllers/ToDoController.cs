@@ -145,8 +145,7 @@ namespace ToDo.UI.Controllers
 
             var viewModel = new ToDoItemListViewModel();
             viewModel.ToDoItemViewList = toDoItemViewList;
-            int recordCount = toDoService.GetAllRecordCount(filter);
-            viewModel.PageCount = GetPageCount(recordCount, PageSize);
+            viewModel.PageCount = toDoService.GetPageCount(filter, PageSize);
             viewModel.DescriptionFilter = filter.DescriptionFilter;
             viewModel.IsCompletedFilter = filter.IsCompletedFilter;
             viewModel.BothFilter = filter.BothFilter;
@@ -169,17 +168,6 @@ namespace ToDo.UI.Controllers
                 toDoViewModelList.Add(toDoItemViewModel);
             }
             return toDoViewModelList;
-        }
-
-        private int GetPageCount(int recordCount, int pageSize)
-        {
-            int pageCount = recordCount / pageSize;
-            if (recordCount % pageSize != 0)
-            {
-                pageCount += 1;
-            }
-
-            return pageCount;
         }
     }
 }
