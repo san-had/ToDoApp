@@ -1,28 +1,26 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using ToDo.Extensibility;
 using ToDo.Extensibility.Dto;
 using ToDo.UI.Models;
+using ToDo.UI.Services;
 
 namespace ToDo.UI.Controllers
 {
     public class ToDoController : Controller
     {
-        private const int PageSize = 25;
         private const int StartPageIndex = 0;
 
-        private readonly IToDoService toDoService;
+        private readonly IViewModelService viewModelService;
 
-        public ToDoController(IToDoService toDoService)
+        public ToDoController(IViewModelService viewModelService)
         {
-            this.toDoService = toDoService;
+            this.viewModelService = viewModelService;
         }
 
         public IActionResult Index()
         {
             var filter = new FilterDto();
-            return View(GetToDoList(filter, StartPageIndex));
+            return View(viewModelService.GetToDoList(filter, StartPageIndex));
         }
 
         [HttpPost]
@@ -34,7 +32,7 @@ namespace ToDo.UI.Controllers
                 IsCompletedFilter = itemListViewModel.IsCompletedFilter,
                 BothFilter = itemListViewModel.BothFilter
             };
-            var model = GetToDoList(filter, currentPageIndex);
+            var model = viewModelService.GetToDoList(filter, currentPageIndex);
             return View(model);
         }
 
@@ -57,7 +55,7 @@ namespace ToDo.UI.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var model = GetToDoList(filter, StartPageIndex);
+                    var model = viewModelService.GetToDoList(filter, StartPageIndex);
                     return View(nameof(Index), model);
                 }
             }
@@ -80,7 +78,7 @@ namespace ToDo.UI.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    int id = toDoService.CreateToDoItem(toDoDto);
+                    int id = viewModelService.AddItem(toDoDto);
                     return RedirectToAction(nameof(Index));
                 }
             }
@@ -93,7 +91,7 @@ namespace ToDo.UI.Controllers
 
         public IActionResult Edit(int id)
         {
-            var toDo = toDoService.GetToDoItemById(id);
+            var toDo = viewModelService.GetItemById(id);
             if (toDo == null)
             {
                 return NotFound();
@@ -108,7 +106,7 @@ namespace ToDo.UI.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    toDoService.UpdateToDoItem(toDo);
+                    viewModelService.UpdateItem(toDo);
                     return RedirectToAction(nameof(Index));
                 }
             }
@@ -122,7 +120,7 @@ namespace ToDo.UI.Controllers
 
         public IActionResult Delete(int id)
         {
-            toDoService.DeleteToDoItem(id);
+            viewModelService.DeleteItem(id);
             return RedirectToAction(nameof(Index));
         }
 
@@ -130,45 +128,6 @@ namespace ToDo.UI.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-
-        private ToDoItemListViewModel GetToDoList(FilterDto filter, int currentPage)
-        {
-            var paging = new PagingDto
-            {
-                PageSize = PageSize,
-                PageNumber = currentPage
-            };
-
-            var toDos = toDoService.GetAll(filter, paging);
-            var toDoItemViewList = ConvertToViewModel(toDos);
-
-            var viewModel = new ToDoItemListViewModel();
-            viewModel.ToDoItemViewList = toDoItemViewList;
-            int recordCount = toDoService.GetAllRecordCount(filter);
-            viewModel.PageCount = toDoService.GetPageCount(recordCount, PageSize);
-            viewModel.DescriptionFilter = filter.DescriptionFilter;
-            viewModel.IsCompletedFilter = filter.IsCompletedFilter;
-            viewModel.BothFilter = filter.BothFilter;
-            viewModel.CurrentPage = currentPage;
-
-            return viewModel;
-        }
-
-        private List<ToDoItemViewModel> ConvertToViewModel(IEnumerable<ToDoDto> toDos)
-        {
-            var toDoViewModelList = new List<ToDoItemViewModel>();
-            foreach (var toDo in toDos)
-            {
-                var toDoItemViewModel = new ToDoItemViewModel()
-                {
-                    Id = toDo.Id,
-                    Description = toDo.Description,
-                    IsCompleted = toDo.IsCompleted
-                };
-                toDoViewModelList.Add(toDoItemViewModel);
-            }
-            return toDoViewModelList;
         }
     }
 }
