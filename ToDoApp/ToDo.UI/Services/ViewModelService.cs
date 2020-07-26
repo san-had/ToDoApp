@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.Extensions.Options;
 using ToDo.Extensibility;
 using ToDo.Extensibility.Dto;
 using ToDo.UI.Models;
@@ -7,12 +8,15 @@ namespace ToDo.UI.Services
 {
     public class ViewModelService : IViewModelService
     {
-        private const int PageSize = 25;
+        private readonly int pageSize;
 
         private readonly IToDoService toDoService;
 
-        public ViewModelService(IToDoService toDoService)
+        public ViewModelService(
+            IOptionsSnapshot<ConfigurationSettings> configurationSettings,
+            IToDoService toDoService)
         {
+            pageSize = configurationSettings.Value.PageSize;
             this.toDoService = toDoService;
         }
 
@@ -40,7 +44,7 @@ namespace ToDo.UI.Services
         {
             var paging = new PagingDto
             {
-                PageSize = PageSize,
+                PageSize = pageSize,
                 PageNumber = currentPage
             };
 
@@ -50,7 +54,7 @@ namespace ToDo.UI.Services
             var viewModel = new ToDoItemListViewModel();
             viewModel.ToDoItemViewList = toDoItemViewList;
             int recordCount = toDoService.GetAllRecordCount(filter);
-            viewModel.PageCount = toDoService.GetPageCount(recordCount, PageSize);
+            viewModel.PageCount = toDoService.GetPageCount(recordCount, pageSize);
             viewModel.DescriptionFilter = filter.DescriptionFilter;
             viewModel.IsCompletedFilter = filter.IsCompletedFilter;
             viewModel.BothFilter = filter.BothFilter;
