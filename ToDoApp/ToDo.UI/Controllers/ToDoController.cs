@@ -19,7 +19,10 @@ namespace ToDo.UI.Controllers
 
         public IActionResult Index()
         {
-            var filter = new FilterDto();
+            var filter = new FilterDto
+            {
+                BothFilter = true
+            };
             return View(viewModelService.GetToDoList(filter, StartPageIndex));
         }
 
@@ -30,7 +33,7 @@ namespace ToDo.UI.Controllers
             {
                 DescriptionFilter = itemListViewModel.DescriptionFilter,
                 IsCompletedFilter = itemListViewModel.IsCompletedFilter,
-                BothFilter = itemListViewModel.BothFilter
+                BothFilter = itemListViewModel.BothFilter.HasValue ? itemListViewModel.BothFilter.Value : true
             };
             var model = viewModelService.GetToDoList(filter, currentPageIndex);
             return View(model);
