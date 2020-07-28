@@ -75,14 +75,18 @@ namespace ToDo.UI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(ToDoDto toDoDto)
+        public IActionResult Create(ToDoItemViewModel toDoItem)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    int id = viewModelService.AddItem(toDoDto);
+                    int id = viewModelService.AddItem(toDoItem);
                     return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    return View(toDoItem);
                 }
             }
             catch (System.Exception)
@@ -94,23 +98,27 @@ namespace ToDo.UI.Controllers
 
         public IActionResult Edit(int id)
         {
-            var toDo = viewModelService.GetItemById(id);
-            if (toDo == null)
+            var toDoItem = viewModelService.GetItemById(id);
+            if (toDoItem == null)
             {
                 return NotFound();
             }
-            return View(toDo);
+            return View(toDoItem);
         }
 
         [HttpPost]
-        public IActionResult Edit(ToDoDto toDo)
+        public IActionResult Edit(ToDoItemViewModel toDoItem)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    viewModelService.UpdateItem(toDo);
+                    viewModelService.UpdateItem(toDoItem);
                     return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    return View(toDoItem);
                 }
             }
             catch (System.Exception)

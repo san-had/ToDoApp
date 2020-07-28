@@ -20,19 +20,22 @@ namespace ToDo.UI.Services
             this.toDoService = toDoService;
         }
 
-        public ToDoDto GetItemById(int id)
+        public ToDoItemViewModel GetItemById(int id)
         {
-            return toDoService.GetToDoItemById(id);
+            var toDoDto = toDoService.GetToDoItemById(id);
+            return ConvertToViewModel(toDoDto);
         }
 
-        public int AddItem(ToDoDto toDo)
+        public int AddItem(ToDoItemViewModel toDoItem)
         {
-            return toDoService.CreateToDoItem(toDo);
+            var toDoDto = ConvertToToDoDto(toDoItem);
+            return toDoService.CreateToDoItem(toDoDto);
         }
 
-        public void UpdateItem(ToDoDto toDo)
+        public void UpdateItem(ToDoItemViewModel toDoItem)
         {
-            toDoService.UpdateToDoItem(toDo);
+            var toDoDto = ConvertToToDoDto(toDoItem);
+            toDoService.UpdateToDoItem(toDoDto);
         }
 
         public void DeleteItem(int id)
@@ -49,7 +52,7 @@ namespace ToDo.UI.Services
             };
 
             var toDos = toDoService.GetAll(filter, paging);
-            var toDoItemViewList = ConvertToViewModel(toDos);
+            var toDoItemViewList = ConvertToViewModelList(toDos);
 
             int recordCount = toDoService.GetAllRecordCount(filter);
             var viewModel = new ToDoItemListViewModel
@@ -65,7 +68,7 @@ namespace ToDo.UI.Services
             return viewModel;
         }
 
-        private List<ToDoItemViewModel> ConvertToViewModel(IEnumerable<ToDoDto> toDos)
+        private List<ToDoItemViewModel> ConvertToViewModelList(IEnumerable<ToDoDto> toDos)
         {
             var toDoViewModelList = new List<ToDoItemViewModel>();
             foreach (var toDo in toDos)
@@ -79,6 +82,28 @@ namespace ToDo.UI.Services
                 toDoViewModelList.Add(toDoItemViewModel);
             }
             return toDoViewModelList;
+        }
+
+        private ToDoItemViewModel ConvertToViewModel(ToDoDto toDo)
+        {
+            ToDoItemViewModel viewModel = new ToDoItemViewModel
+            {
+                Id = toDo.Id,
+                Description = toDo.Description,
+                IsCompleted = toDo.IsCompleted
+            };
+            return viewModel;
+        }
+
+        private ToDoDto ConvertToToDoDto(ToDoItemViewModel viewModel)
+        {
+            ToDoDto toDo = new ToDoDto
+            {
+                Id = viewModel.Id,
+                Description = viewModel.Description,
+                IsCompleted = viewModel.IsCompleted
+            };
+            return toDo;
         }
     }
 }

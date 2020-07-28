@@ -7,11 +7,11 @@ namespace ToDo.UI.Services
     {
         ToDoItemListViewModel GetToDoList(FilterDto filter, int currentPage);
 
-        int AddItem(ToDoDto toDo);
+        int AddItem(ToDoItemViewModel toDoItem);
 
-        ToDoDto GetItemById(int id);
+        ToDoItemViewModel GetItemById(int id);
 
-        void UpdateItem(ToDoDto toDo);
+        void UpdateItem(ToDoItemViewModel toDoItem);
 
         void DeleteItem(int id);
     }
