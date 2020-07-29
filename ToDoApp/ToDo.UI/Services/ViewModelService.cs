@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 using ToDo.Extensibility;
 using ToDo.Extensibility.Dto;
 using ToDo.UI.Converters;
@@ -23,30 +24,30 @@ namespace ToDo.UI.Services
             this.toDoConverter = toDoConverter;
         }
 
-        public ToDoItemViewModel GetItemById(int id)
+        public async Task<ToDoItemViewModel> GetItemById(int id)
         {
             var toDoDto = toDoService.GetToDoItemById(id);
             return toDoConverter.Convert(toDoDto);
         }
 
-        public int AddItem(ToDoItemViewModel toDoItem)
+        public async Task<int> AddItem(ToDoItemViewModel toDoItem)
         {
             var toDoDto = toDoConverter.Convert(toDoItem);
             return toDoService.CreateToDoItem(toDoDto);
         }
 
-        public void UpdateItem(ToDoItemViewModel toDoItem)
+        public async Task UpdateItem(ToDoItemViewModel toDoItem)
         {
             var toDoDto = toDoConverter.Convert(toDoItem);
             toDoService.UpdateToDoItem(toDoDto);
         }
 
-        public void DeleteItem(int id)
+        public async Task DeleteItem(int id)
         {
             toDoService.DeleteToDoItem(id);
         }
 
-        public ToDoItemListViewModel GetToDoList(FilterDto filter, int currentPage)
+        public async Task<ToDoItemListViewModel> GetToDoList(FilterDto filter, int currentPage)
         {
             var paging = new PagingDto
             {

@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ToDo.Extensibility.Dto;
 using ToDo.UI.Models;
@@ -17,17 +18,18 @@ namespace ToDo.UI.Controllers
             this.viewModelService = viewModelService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var filter = new FilterDto
             {
                 BothFilter = true
             };
-            return View(viewModelService.GetToDoList(filter, StartPageIndex));
+            var model = await viewModelService.GetToDoList(filter, StartPageIndex);
+            return View(model);
         }
 
         [HttpPost]
-        public IActionResult Index(int currentPageIndex, ToDoItemListViewModel itemListViewModel)
+        public async Task<IActionResult> Index(int currentPageIndex, ToDoItemListViewModel itemListViewModel)
         {
             var filter = new FilterDto()
             {
@@ -35,7 +37,7 @@ namespace ToDo.UI.Controllers
                 IsCompletedFilter = itemListViewModel.IsCompletedFilter,
                 BothFilter = itemListViewModel.BothFilter ?? true
             };
-            var model = viewModelService.GetToDoList(filter, currentPageIndex);
+            var model = await viewModelService.GetToDoList(filter, currentPageIndex);
             return View(model);
         }
 
@@ -45,7 +47,7 @@ namespace ToDo.UI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Search(FilterViewModel filterViewModel)
+        public async Task<IActionResult> Search(FilterViewModel filterViewModel)
         {
             var filter = new FilterDto
             {
@@ -58,7 +60,7 @@ namespace ToDo.UI.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var model = viewModelService.GetToDoList(filter, StartPageIndex);
+                    var model = await viewModelService.GetToDoList(filter, StartPageIndex);
                     return View(nameof(Index), model);
                 }
             }
@@ -75,13 +77,13 @@ namespace ToDo.UI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(ToDoItemViewModel toDoItem)
+        public async Task<IActionResult> Create(ToDoItemViewModel toDoItem)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    int id = viewModelService.AddItem(toDoItem);
+                    await viewModelService.AddItem(toDoItem);
                     return RedirectToAction(nameof(Index));
                 }
                 else
@@ -96,9 +98,9 @@ namespace ToDo.UI.Controllers
             return View(nameof(Index));
         }
 
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            var toDoItem = viewModelService.GetItemById(id);
+            var toDoItem = await viewModelService.GetItemById(id);
             if (toDoItem == null)
             {
                 return NotFound();
@@ -107,13 +109,13 @@ namespace ToDo.UI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(ToDoItemViewModel toDoItem)
+        public async Task<IActionResult> Edit(ToDoItemViewModel toDoItem)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    viewModelService.UpdateItem(toDoItem);
+                    await viewModelService.UpdateItem(toDoItem);
                     return RedirectToAction(nameof(Index));
                 }
                 else
@@ -129,9 +131,9 @@ namespace ToDo.UI.Controllers
             return View("Index");
         }
 
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            viewModelService.DeleteItem(id);
+            await viewModelService.DeleteItem(id);
             return RedirectToAction(nameof(Index));
         }
 
