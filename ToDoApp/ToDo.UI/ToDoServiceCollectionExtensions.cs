@@ -4,6 +4,7 @@ using ToDo.Domain.Database.Providers;
 using ToDo.Domain.Repositories;
 using ToDo.Extensibility;
 using ToDo.Service;
+using ToDo.UI.Converters;
 using ToDo.UI.Services;
 
 namespace ToDo.UI
@@ -16,6 +17,7 @@ namespace ToDo.UI
             services.AddScoped<IToDoEntityConverter, ToDoEntityConverter>();
             services.AddScoped<IToDoRepository, ToDoRepository>();
             services.AddScoped<IToDoService, ToDoService>();
+            services.AddScoped<IToDoConverter, ToDoConverter>();
             services.AddScoped<IViewModelService, ViewModelService>();
             return services;
         }

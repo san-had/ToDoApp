@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using ToDo.Extensibility;
 using ToDo.Extensibility.Dto;
+using ToDo.UI.Converters;
 using ToDo.UI.Models;
 
 namespace ToDo.UI.Services
@@ -11,30 +11,33 @@ namespace ToDo.UI.Services
         private readonly int pageSize;
 
         private readonly IToDoService toDoService;
+        private readonly IToDoConverter toDoConverter;
 
         public ViewModelService(
             IOptionsSnapshot<ConfigurationSettings> configurationSettings,
-            IToDoService toDoService)
+            IToDoService toDoService,
+            IToDoConverter toDoConverter)
         {
             pageSize = configurationSettings.Value.PageSize;
             this.toDoService = toDoService;
+            this.toDoConverter = toDoConverter;
         }
 
         public ToDoItemViewModel GetItemById(int id)
         {
             var toDoDto = toDoService.GetToDoItemById(id);
-            return ConvertToViewModel(toDoDto);
+            return toDoConverter.Convert(toDoDto);
         }
 
         public int AddItem(ToDoItemViewModel toDoItem)
         {
-            var toDoDto = ConvertToToDoDto(toDoItem);
+            var toDoDto = toDoConverter.Convert(toDoItem);
             return toDoService.CreateToDoItem(toDoDto);
         }
 
         public void UpdateItem(ToDoItemViewModel toDoItem)
         {
-            var toDoDto = ConvertToToDoDto(toDoItem);
+            var toDoDto = toDoConverter.Convert(toDoItem);
             toDoService.UpdateToDoItem(toDoDto);
         }
 
@@ -52,7 +55,7 @@ namespace ToDo.UI.Services
             };
 
             var toDos = toDoService.GetAll(filter, paging);
-            var toDoItemViewList = ConvertToViewModelList(toDos);
+            var toDoItemViewList = toDoConverter.ConvertToViewModelList(toDos);
 
             int recordCount = toDoService.GetAllRecordCount(filter);
             var viewModel = new ToDoItemListViewModel
@@ -66,44 +69,6 @@ namespace ToDo.UI.Services
             };
 
             return viewModel;
-        }
-
-        private List<ToDoItemViewModel> ConvertToViewModelList(IEnumerable<ToDoDto> toDos)
-        {
-            var toDoViewModelList = new List<ToDoItemViewModel>();
-            foreach (var toDo in toDos)
-            {
-                var toDoItemViewModel = new ToDoItemViewModel()
-                {
-                    Id = toDo.Id,
-                    Description = toDo.Description,
-                    IsCompleted = toDo.IsCompleted
-                };
-                toDoViewModelList.Add(toDoItemViewModel);
-            }
-            return toDoViewModelList;
-        }
-
-        private ToDoItemViewModel ConvertToViewModel(ToDoDto toDo)
-        {
-            ToDoItemViewModel viewModel = new ToDoItemViewModel
-            {
-                Id = toDo.Id,
-                Description = toDo.Description,
-                IsCompleted = toDo.IsCompleted
-            };
-            return viewModel;
-        }
-
-        private ToDoDto ConvertToToDoDto(ToDoItemViewModel viewModel)
-        {
-            ToDoDto toDo = new ToDoDto
-            {
-                Id = viewModel.Id,
-                Description = viewModel.Description,
-                IsCompleted = viewModel.IsCompleted
-            };
-            return toDo;
         }
     }
 }
