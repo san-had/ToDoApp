@@ -21,7 +21,7 @@ namespace ToDo.Domain.Repositories
             this.toDoEntityConverter = toDoEntityConverter;
         }
 
-        public async Task<int> Create(ToDoDto toDoDto)
+        public async Task<int> CreateAsync(ToDoDto toDoDto)
         {
             ToDoDbModel toDo = toDoEntityConverter.Convert(toDoDto);
             await dbContext.AddAsync(toDo);
@@ -29,7 +29,7 @@ namespace ToDo.Domain.Repositories
             return toDo.Id;
         }
 
-        public async Task<IEnumerable<ToDoDto>> GetAll(FilterDto filter, PagingDto paging)
+        public async Task<IEnumerable<ToDoDto>> GetAllAsync(FilterDto filter, PagingDto paging)
         {
             IQueryable<ToDoDbModel> toDbModels = FilterToDoDbModel(filter);
 
@@ -38,13 +38,13 @@ namespace ToDo.Domain.Repositories
             return toDbModelsList.Select(toDbModel => toDoEntityConverter.Convert(toDbModel));
         }
 
-        public async Task<ToDoDto> GetToDoItemById(int id)
+        public async Task<ToDoDto> GetToDoItemByIdAsync(int id)
         {
             var toDoDbModel = await dbContext.ToDos.FirstOrDefaultAsync(t => t.Id == id);
             return toDoEntityConverter.Convert(toDoDbModel);
         }
 
-        public async Task Update(ToDoDto toDoDto)
+        public async Task UpdateAsync(ToDoDto toDoDto)
         {
             var toDoDbModel = dbContext.ToDos.FirstOrDefault(t => t.Id == toDoDto.Id);
             toDoDbModel.Description = toDoDto.Description;
@@ -52,14 +52,14 @@ namespace ToDo.Domain.Repositories
             await dbContext.SaveChangesAsync();
         }
 
-        public async Task Delete(int id)
+        public async Task DeleteAsync(int id)
         {
             var toDoDbModel = dbContext.ToDos.FirstOrDefault(t => t.Id == id);
             dbContext.Remove(toDoDbModel);
             await dbContext.SaveChangesAsync();
         }
 
-        public async Task<int> GetAllRecordCount(FilterDto filter)
+        public async Task<int> GetAllRecordCountAsync(FilterDto filter)
         {
             IQueryable<ToDoDbModel> toDbModels = FilterToDoDbModel(filter);
 

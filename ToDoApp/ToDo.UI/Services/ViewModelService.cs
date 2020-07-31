@@ -24,30 +24,30 @@ namespace ToDo.UI.Services
             this.toDoConverter = toDoConverter;
         }
 
-        public async Task<ToDoItemViewModel> GetItemById(int id)
+        public async Task<ToDoItemViewModel> GetItemByIdAsync(int id)
         {
-            var toDoDto = await toDoService.GetToDoItemById(id);
+            var toDoDto = await toDoService.GetToDoItemByIdAsync(id);
             return toDoConverter.Convert(toDoDto);
         }
 
-        public async Task<int> AddItem(ToDoItemViewModel toDoItem)
+        public async Task<int> AddItemAsync(ToDoItemViewModel toDoItem)
         {
             var toDoDto = toDoConverter.Convert(toDoItem);
-            return await toDoService.CreateToDoItem(toDoDto);
+            return await toDoService.CreateToDoItemAsync(toDoDto);
         }
 
-        public async Task UpdateItem(ToDoItemViewModel toDoItem)
+        public async Task UpdateItemAsync(ToDoItemViewModel toDoItem)
         {
             var toDoDto = toDoConverter.Convert(toDoItem);
-            await toDoService.UpdateToDoItem(toDoDto);
+            await toDoService.UpdateToDoItemAsync(toDoDto);
         }
 
-        public async Task DeleteItem(int id)
+        public async Task DeleteItemAsync(int id)
         {
-            await toDoService.DeleteToDoItem(id);
+            await toDoService.DeleteToDoItemAsync(id);
         }
 
-        public async Task<ToDoItemListViewModel> GetToDoList(FilterDto filter, int currentPage)
+        public async Task<ToDoItemListViewModel> GetToDoListAsync(FilterDto filter, int currentPage)
         {
             var paging = new PagingDto
             {
@@ -55,10 +55,10 @@ namespace ToDo.UI.Services
                 PageNumber = currentPage
             };
 
-            var toDos = await toDoService.GetAll(filter, paging);
+            var toDos = await toDoService.GetAllAsync(filter, paging);
             var toDoItemViewList = toDoConverter.ConvertToViewModelList(toDos);
 
-            int recordCount = await toDoService.GetAllRecordCount(filter);
+            int recordCount = await toDoService.GetAllRecordCountAsync(filter);
             var viewModel = new ToDoItemListViewModel
             {
                 ToDoItemViewList = toDoItemViewList,

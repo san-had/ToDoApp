@@ -42,7 +42,7 @@ namespace ToDo.Con
             //var toDo = toDoService.GetToDoItemById(1);
             //toDo.IsCompleted = true;
             //toDoService.UpdateToDoItem(toDo);
-            DisplayToDo(await toDoService.GetToDoItemById(3));
+            DisplayToDo(await toDoService.GetToDoItemByIdAsync(3));
             //DisplayToDos(GetAll());
         }
 
@@ -55,12 +55,12 @@ namespace ToDo.Con
 
         private async static Task<int> CreateToDoRecord(ToDoDto toDo)
         {
-            return await toDoService.CreateToDoItem(toDo);
+            return await toDoService.CreateToDoItemAsync(toDo);
         }
 
         private async static Task<IEnumerable<ToDoDto>> GetAll(FilterDto filter, PagingDto paging)
         {
-            return await toDoService.GetAll(filter, paging);
+            return await toDoService.GetAllAsync(filter, paging);
         }
 
         private static void DisplayToDos(IEnumerable<ToDoDto> toDoDtos)

@@ -14,29 +14,29 @@ namespace ToDo.Service
             this.toDoRepository = toDoRepository;
         }
 
-        public async Task<int> CreateToDoItem(ToDoDto toDoDto)
+        public async Task<int> CreateToDoItemAsync(ToDoDto toDoDto)
         {
-            return await toDoRepository.Create(toDoDto);
+            return await toDoRepository.CreateAsync(toDoDto);
         }
 
-        public async Task<IEnumerable<ToDoDto>> GetAll(FilterDto filter, PagingDto paging)
+        public async Task<IEnumerable<ToDoDto>> GetAllAsync(FilterDto filter, PagingDto paging)
         {
-            return await toDoRepository.GetAll(filter, paging);
+            return await toDoRepository.GetAllAsync(filter, paging);
         }
 
-        public async Task<ToDoDto> GetToDoItemById(int id)
+        public async Task<ToDoDto> GetToDoItemByIdAsync(int id)
         {
-            return await toDoRepository.GetToDoItemById(id);
+            return await toDoRepository.GetToDoItemByIdAsync(id);
         }
 
-        public async Task UpdateToDoItem(ToDoDto toDoDto)
+        public async Task UpdateToDoItemAsync(ToDoDto toDoDto)
         {
-            await toDoRepository.Update(toDoDto);
+            await toDoRepository.UpdateAsync(toDoDto);
         }
 
-        public async Task DeleteToDoItem(int id)
+        public async Task DeleteToDoItemAsync(int id)
         {
-            await toDoRepository.Delete(id);
+            await toDoRepository.DeleteAsync(id);
         }
 
         public int GetPageCount(int recordCount, int pageSize)
@@ -50,9 +50,9 @@ namespace ToDo.Service
             return pageCount;
         }
 
-        public async Task<int> GetAllRecordCount(FilterDto filter)
+        public async Task<int> GetAllRecordCountAsync(FilterDto filter)
         {
-            return await toDoRepository.GetAllRecordCount(filter);
+            return await toDoRepository.GetAllRecordCountAsync(filter);
         }
     }
 }

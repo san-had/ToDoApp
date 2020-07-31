@@ -24,7 +24,7 @@ namespace ToDo.UI.Controllers
             {
                 BothFilter = true
             };
-            var model = await viewModelService.GetToDoList(filter, StartPageIndex);
+            var model = await viewModelService.GetToDoListAsync(filter, StartPageIndex);
             return View(model);
         }
 
@@ -37,7 +37,7 @@ namespace ToDo.UI.Controllers
                 IsCompletedFilter = itemListViewModel.IsCompletedFilter,
                 BothFilter = itemListViewModel.BothFilter ?? true
             };
-            var model = await viewModelService.GetToDoList(filter, currentPageIndex);
+            var model = await viewModelService.GetToDoListAsync(filter, currentPageIndex);
             return View(model);
         }
 
@@ -60,7 +60,7 @@ namespace ToDo.UI.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var model = await viewModelService.GetToDoList(filter, StartPageIndex);
+                    var model = await viewModelService.GetToDoListAsync(filter, StartPageIndex);
                     return View(nameof(Index), model);
                 }
             }
@@ -83,7 +83,7 @@ namespace ToDo.UI.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    await viewModelService.AddItem(toDoItem);
+                    await viewModelService.AddItemAsync(toDoItem);
                     return RedirectToAction(nameof(Index));
                 }
                 else
@@ -100,7 +100,7 @@ namespace ToDo.UI.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
-            var toDoItem = await viewModelService.GetItemById(id);
+            var toDoItem = await viewModelService.GetItemByIdAsync(id);
             if (toDoItem == null)
             {
                 return NotFound();
@@ -115,7 +115,7 @@ namespace ToDo.UI.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    await viewModelService.UpdateItem(toDoItem);
+                    await viewModelService.UpdateItemAsync(toDoItem);
                     return RedirectToAction(nameof(Index));
                 }
                 else
@@ -133,7 +133,7 @@ namespace ToDo.UI.Controllers
 
         public async Task<IActionResult> Delete(int id)
         {
-            await viewModelService.DeleteItem(id);
+            await viewModelService.DeleteItemAsync(id);
             return RedirectToAction(nameof(Index));
         }
 

@@ -6,16 +6,16 @@ namespace ToDo.Extensibility
 {
     public interface IToDoRepository
     {
-        Task<int> Create(ToDoDto toDoDto);
+        Task<int> CreateAsync(ToDoDto toDoDto);
 
-        Task<IEnumerable<ToDoDto>> GetAll(FilterDto filter, PagingDto paging);
+        Task<IEnumerable<ToDoDto>> GetAllAsync(FilterDto filter, PagingDto paging);
 
-        Task<int> GetAllRecordCount(FilterDto filter);
+        Task<int> GetAllRecordCountAsync(FilterDto filter);
 
-        Task<ToDoDto> GetToDoItemById(int id);
+        Task<ToDoDto> GetToDoItemByIdAsync(int id);
 
-        Task Update(ToDoDto toDoDto);
+        Task UpdateAsync(ToDoDto toDoDto);
 
-        Task Delete(int id);
+        Task DeleteAsync(int id);
     }
 }

@@ -6,14 +6,14 @@ namespace ToDo.UI.Services
 {
     public interface IViewModelService
     {
-        Task<ToDoItemListViewModel> GetToDoList(FilterDto filter, int currentPage);
+        Task<ToDoItemListViewModel> GetToDoListAsync(FilterDto filter, int currentPage);
 
-        Task<int> AddItem(ToDoItemViewModel toDoItem);
+        Task<int> AddItemAsync(ToDoItemViewModel toDoItem);
 
-        Task<ToDoItemViewModel> GetItemById(int id);
+        Task<ToDoItemViewModel> GetItemByIdAsync(int id);
 
-        Task UpdateItem(ToDoItemViewModel toDoItem);
+        Task UpdateItemAsync(ToDoItemViewModel toDoItem);
 
-        Task DeleteItem(int id);
+        Task DeleteItemAsync(int id);
     }
 }
