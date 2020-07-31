@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Ninject;
 using NUnit.Framework;
@@ -71,11 +72,11 @@ namespace ToDo.Test.Integration
         };
 
         [TestCase(TestName = "Get ToDo item by Id")]
-        public void GetToDosFromContext()
+        public async Task GetToDosFromContext()
         {
             using MsSqlLiteDatabaseContext context = new MsSqlLiteDatabaseContext(optionsSnapShotMock.Object);
             var toDoService = GetToDoService(context, toDosForContextLoading);
-            var toDo = toDoService.GetToDoItemById(id: 2);
+            var toDo = await toDoService.GetToDoItemById(id: 2);
 
             Assert.IsNotNull(toDo);
             Assert.AreEqual(2, toDo.Id);
@@ -86,14 +87,14 @@ namespace ToDo.Test.Integration
         }
 
         [TestCase(TestName = "Multiple page test")]
-        public void GetAllPagingTest()
+        public async Task GetAllPagingTest()
         {
             using MsSqlLiteDatabaseContext context = new MsSqlLiteDatabaseContext(optionsSnapShotMock.Object);
             var toDoService = GetToDoService(context, toDosForPaging);
             var paging = new PagingDto { PageNumber = 2, PageSize = 5 };
 
             int expectedToDosCount = 2;
-            int actualToDosCount = toDoService.GetAll(null, paging).Count();
+            int actualToDosCount = (await toDoService.GetAll(null, paging)).Count();
 
             Assert.AreEqual(expectedToDosCount, actualToDosCount);
 
@@ -101,13 +102,13 @@ namespace ToDo.Test.Integration
         }
 
         [Test(Description = "Filtering test"), TestCaseSource(nameof(sourceListForFiltering))]
-        public void GetAllFilteringTest(int rowNumber, int expectedCount, int pageNumber, FilterDto filter)
+        public async Task GetAllFilteringTest(int rowNumber, int expectedCount, int pageNumber, FilterDto filter)
         {
             using MsSqlLiteDatabaseContext context = new MsSqlLiteDatabaseContext(optionsSnapShotMock.Object);
             var toDoService = GetToDoService(context, toDosForFiltering);
             var paging = new PagingDto { PageNumber = pageNumber, PageSize = 5 };
 
-            int actualCount = toDoService.GetAll(filter, paging).Count();
+            int actualCount = (await toDoService.GetAll(filter, paging)).Count();
 
             Assert.AreEqual(expectedCount, actualCount);
 

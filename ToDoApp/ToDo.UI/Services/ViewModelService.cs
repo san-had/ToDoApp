@@ -26,25 +26,25 @@ namespace ToDo.UI.Services
 
         public async Task<ToDoItemViewModel> GetItemById(int id)
         {
-            var toDoDto = toDoService.GetToDoItemById(id);
+            var toDoDto = await toDoService.GetToDoItemById(id);
             return toDoConverter.Convert(toDoDto);
         }
 
         public async Task<int> AddItem(ToDoItemViewModel toDoItem)
         {
             var toDoDto = toDoConverter.Convert(toDoItem);
-            return toDoService.CreateToDoItem(toDoDto);
+            return await toDoService.CreateToDoItem(toDoDto);
         }
 
         public async Task UpdateItem(ToDoItemViewModel toDoItem)
         {
             var toDoDto = toDoConverter.Convert(toDoItem);
-            toDoService.UpdateToDoItem(toDoDto);
+            await toDoService.UpdateToDoItem(toDoDto);
         }
 
         public async Task DeleteItem(int id)
         {
-            toDoService.DeleteToDoItem(id);
+            await toDoService.DeleteToDoItem(id);
         }
 
         public async Task<ToDoItemListViewModel> GetToDoList(FilterDto filter, int currentPage)
@@ -55,10 +55,10 @@ namespace ToDo.UI.Services
                 PageNumber = currentPage
             };
 
-            var toDos = toDoService.GetAll(filter, paging);
+            var toDos = await toDoService.GetAll(filter, paging);
             var toDoItemViewList = toDoConverter.ConvertToViewModelList(toDos);
 
-            int recordCount = toDoService.GetAllRecordCount(filter);
+            int recordCount = await toDoService.GetAllRecordCount(filter);
             var viewModel = new ToDoItemListViewModel
             {
                 ToDoItemViewList = toDoItemViewList,

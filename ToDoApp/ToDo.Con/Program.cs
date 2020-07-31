@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Ninject;
 using ToDo.Domain;
 using ToDo.Extensibility.Dto;
@@ -12,7 +13,7 @@ namespace ToDo.Con
         private static readonly StandardKernel kernel = new StandardKernel();
         private static ToDoService toDoService;
 
-        private static void Main()
+        private async static Task Main()
         {
             Init();
 
@@ -34,14 +35,14 @@ namespace ToDo.Con
                 PageNumber = 1
             };
 
-            DisplayToDos(GetAll(filter, paging));
+            DisplayToDos(await GetAll(filter, paging));
             //toDoService.DeleteToDoItem(3);
             //DisplayToDo(toDoService.GetToDoItemById(3));
 
             //var toDo = toDoService.GetToDoItemById(1);
             //toDo.IsCompleted = true;
             //toDoService.UpdateToDoItem(toDo);
-            DisplayToDo(toDoService.GetToDoItemById(3));
+            DisplayToDo(await toDoService.GetToDoItemById(3));
             //DisplayToDos(GetAll());
         }
 
@@ -52,14 +53,14 @@ namespace ToDo.Con
             toDoService = kernel.Get<ToDoService>();
         }
 
-        private static int CreateToDoRecord(ToDoDto toDo)
+        private async static Task<int> CreateToDoRecord(ToDoDto toDo)
         {
-            return toDoService.CreateToDoItem(toDo);
+            return await toDoService.CreateToDoItem(toDo);
         }
 
-        private static IEnumerable<ToDoDto> GetAll(FilterDto filter, PagingDto paging)
+        private async static Task<IEnumerable<ToDoDto>> GetAll(FilterDto filter, PagingDto paging)
         {
-            return toDoService.GetAll(filter, paging);
+            return await toDoService.GetAll(filter, paging);
         }
 
         private static void DisplayToDos(IEnumerable<ToDoDto> toDoDtos)

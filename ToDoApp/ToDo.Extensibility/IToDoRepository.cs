@@ -1,20 +1,21 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using ToDo.Extensibility.Dto;
 
 namespace ToDo.Extensibility
 {
     public interface IToDoRepository
     {
-        int Create(ToDoDto toDoDto);
+        Task<int> Create(ToDoDto toDoDto);
 
-        IEnumerable<ToDoDto> GetAll(FilterDto filter, PagingDto paging);
+        Task<IEnumerable<ToDoDto>> GetAll(FilterDto filter, PagingDto paging);
 
-        int GetAllRecordCount(FilterDto filter);
+        Task<int> GetAllRecordCount(FilterDto filter);
 
-        ToDoDto GetToDoItemById(int id);
+        Task<ToDoDto> GetToDoItemById(int id);
 
-        void Update(ToDoDto toDoDto);
+        Task Update(ToDoDto toDoDto);
 
-        void Delete(int id);
+        Task Delete(int id);
     }
 }

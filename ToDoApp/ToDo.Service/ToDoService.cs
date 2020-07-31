@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using ToDo.Extensibility;
 using ToDo.Extensibility.Dto;
 
@@ -13,29 +14,29 @@ namespace ToDo.Service
             this.toDoRepository = toDoRepository;
         }
 
-        public int CreateToDoItem(ToDoDto toDoDto)
+        public async Task<int> CreateToDoItem(ToDoDto toDoDto)
         {
-            return toDoRepository.Create(toDoDto);
+            return await toDoRepository.Create(toDoDto);
         }
 
-        public IEnumerable<ToDoDto> GetAll(FilterDto filter, PagingDto paging)
+        public async Task<IEnumerable<ToDoDto>> GetAll(FilterDto filter, PagingDto paging)
         {
-            return toDoRepository.GetAll(filter, paging);
+            return await toDoRepository.GetAll(filter, paging);
         }
 
-        public ToDoDto GetToDoItemById(int id)
+        public async Task<ToDoDto> GetToDoItemById(int id)
         {
-            return toDoRepository.GetToDoItemById(id);
+            return await toDoRepository.GetToDoItemById(id);
         }
 
-        public void UpdateToDoItem(ToDoDto toDoDto)
+        public async Task UpdateToDoItem(ToDoDto toDoDto)
         {
-            toDoRepository.Update(toDoDto);
+            await toDoRepository.Update(toDoDto);
         }
 
-        public void DeleteToDoItem(int id)
+        public async Task DeleteToDoItem(int id)
         {
-            toDoRepository.Delete(id);
+            await toDoRepository.Delete(id);
         }
 
         public int GetPageCount(int recordCount, int pageSize)
@@ -49,9 +50,9 @@ namespace ToDo.Service
             return pageCount;
         }
 
-        public int GetAllRecordCount(FilterDto filter)
+        public async Task<int> GetAllRecordCount(FilterDto filter)
         {
-            return toDoRepository.GetAllRecordCount(filter);
+            return await toDoRepository.GetAllRecordCount(filter);
         }
     }
 }
