@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDo.Mvc.UI", "ToDo.Mvc.UI\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDo.Test", "ToDo.Test\ToDo.Test.csproj", "{0EA7FC1D-011B-4AF6-B113-4F179E478C76}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDo.Pages.UI", "ToDo.Pages.UI\ToDo.Pages.UI.csproj", "{CF3F8180-FC39-4F94-B835-79AFF12AC0EE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDo.Pages.UI", "ToDo.Pages.UI\ToDo.Pages.UI.csproj", "{8252117A-AB68-407F-8661-A2BC27656ED2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,10 +53,10 @@ Global
 		{0EA7FC1D-011B-4AF6-B113-4F179E478C76}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0EA7FC1D-011B-4AF6-B113-4F179E478C76}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0EA7FC1D-011B-4AF6-B113-4F179E478C76}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CF3F8180-FC39-4F94-B835-79AFF12AC0EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CF3F8180-FC39-4F94-B835-79AFF12AC0EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CF3F8180-FC39-4F94-B835-79AFF12AC0EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CF3F8180-FC39-4F94-B835-79AFF12AC0EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8252117A-AB68-407F-8661-A2BC27656ED2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8252117A-AB68-407F-8661-A2BC27656ED2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8252117A-AB68-407F-8661-A2BC27656ED2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8252117A-AB68-407F-8661-A2BC27656ED2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
