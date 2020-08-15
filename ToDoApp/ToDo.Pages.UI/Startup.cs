@@ -1,12 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ToDo.Domain.Migrations;
+using ToDo.Extensibility.Dto;
 
 namespace ToDo.Pages.UI
 {
@@ -22,7 +20,9 @@ namespace ToDo.Pages.UI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddToDo();
             services.AddRazorPages();
+            services.Configure<ConfigurationSettings>(Configuration.GetSection("ConfigurationSettings"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,6 +47,8 @@ namespace ToDo.Pages.UI
             {
                 endpoints.MapRazorPages();
             });
+
+            app.UpdateSchema();
         }
     }
 }

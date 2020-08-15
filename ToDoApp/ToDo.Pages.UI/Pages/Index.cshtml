@@ -1,10 +1,30 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "All ToDos";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="table-responsive">
+    <table class="table table-striped todo">
+        <thead>
+            <tr>
+                <th>Task</th>
+                <th>Completed</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var toDo in Model.AllToDos)
+            {
+                string isCompleted = toDo.IsCompleted ? "Yes" : "No";
+                <tr>
+                    <td>@toDo.Description</td>
+                    <td>@isCompleted</td>
+                    <td><a asp-action="Edit" asp-route-id="@toDo.Id" class="btn btn-outline-primary">Edit</a></td>
+                    <td><a asp-action="Delete" asp-route-id="@toDo.Id" class="btn btn-outline-danger" onclick="return confirm('Are you sure?')">Delete</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
