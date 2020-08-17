@@ -1,0 +1,41 @@
+﻿@page
+@model ToDo.Pages.UI.Pages.EditModel
+@{
+    ViewData["Title"] = "Update Task";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Search</title>
+</head>
+<body>
+    <h3>@ViewData["Title"]</h3>
+    <form method="post" class="form-horizontal">
+        <div class="form-group">
+            <label asp-for="ToDoItemEditModel.Description" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="ToDoItemEditModel.Description" class="form-control" />
+                <span asp-validation-for="ToDoItemEditModel.Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <div class="checkbox">
+                        <label class="control-label"></label>
+                        <input asp-for="ToDoItemEditModel.IsCompleted" /> Completed?
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="hidden" asp-for="ToDoItemEditModel.Id" />
+                <button type="submit" class="btn btn-primary">Update</button>
+            </div>
+        </div>
+    </form>
+</body>
+</html>

@@ -1,8 +1,6 @@
 ﻿@page
 @model IndexModel
-@{
-    ViewData["Title"] = "All ToDos";
-}
+@{ ViewData["Title"] = "All ToDos"; }
 
 <div class="table-responsive">
     <table class="table table-striped todo">
@@ -18,13 +16,13 @@
             @foreach (var toDo in Model.AllToDos)
             {
                 string isCompleted = toDo.IsCompleted ? "Yes" : "No";
-                <tr>
-                    <td>@toDo.Description</td>
-                    <td>@isCompleted</td>
-                    <td><a asp-action="Edit" asp-route-id="@toDo.Id" class="btn btn-outline-primary">Edit</a></td>
-                    <td><a asp-action="Delete" asp-route-id="@toDo.Id" class="btn btn-outline-danger" onclick="return confirm('Are you sure?')">Delete</a></td>
-                </tr>
-            }
+<tr>
+    <td>@toDo.Description</td>
+    <td>@isCompleted</td>
+    <td><a asp-area="" asp-page="/Edit" asp-route-id="@toDo.Id" class="btn btn-outline-primary">Edit</a></td>
+    <td><a asp-action="Delete" asp-route-id="@toDo.Id" class="btn btn-outline-danger" onclick="return confirm('Are you sure?')">Delete</a></td>
+</tr>
+       }
         </tbody>
     </table>
 </div>

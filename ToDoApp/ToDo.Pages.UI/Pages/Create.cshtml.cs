@@ -9,7 +9,7 @@ namespace ToDo.Pages.UI.Pages
 {
     public class CreateModel : PageModel
     {
-        private IToDoService toDoService;
+        private readonly IToDoService toDoService;
 
         public CreateModel(IToDoService toDoService)
         {
@@ -17,7 +17,7 @@ namespace ToDo.Pages.UI.Pages
         }
 
         [BindProperty]
-        public ToDoBindingModel NewToDoItem { get; set; }
+        public ToDoBindingModel ToDoItemCreateModel { get; set; }
 
         public void OnGet()
         {
@@ -29,8 +29,8 @@ namespace ToDo.Pages.UI.Pages
             {
                 var toDoItem = new ToDoDto
                 {
-                    Description = NewToDoItem.Description,
-                    IsCompleted = NewToDoItem.IsCompleted
+                    Description = ToDoItemCreateModel.Description,
+                    IsCompleted = ToDoItemCreateModel.IsCompleted
                 };
                 await toDoService.CreateToDoItemAsync(toDoItem);
                 return RedirectToPage("Index");

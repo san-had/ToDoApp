@@ -1,8 +1,6 @@
 ﻿@page
 @model ToDo.Pages.UI.Pages.CreateModel
-@{
-    ViewData["Title"] = "Create Task";
-}
+@{ ViewData["Title"] = "Create Task"; }
 
 <!DOCTYPE html>
 
@@ -15,17 +13,17 @@
     <h3>@ViewData["Title"]</h3>
     <form method="post" class="form-horizontal">
         <div class="form-group">
-            <label asp-for="NewToDoItem.Description" class="col-md-2 control-label"></label>
+            <label asp-for="ToDoItemCreateModel.Description" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="NewToDoItem.Description" class="form-control" />
-                <span asp-validation-for="NewToDoItem.Description" class="text-danger"></span>
+                <input asp-for="ToDoItemCreateModel.Description" class="form-control" />
+                <span asp-validation-for="ToDoItemCreateModel.Description" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
                     <div class="checkbox">
                         <label class="control-label"></label>
-                        <input asp-for="NewToDoItem.IsCompleted" /> Completed?
+                        <input asp-for="ToDoItemCreateModel.IsCompleted" /> Completed?
                     </div>
                 </div>
             </div>
