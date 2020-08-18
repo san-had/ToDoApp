@@ -1,9 +1,9 @@
-using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using ToDo.Extensibility;
 using ToDo.Extensibility.Dto;
+using ToDo.Pages.UI.Models;
 
 namespace ToDo.Pages.UI.Pages
 {
@@ -36,19 +36,6 @@ namespace ToDo.Pages.UI.Pages
                 return RedirectToPage("Index");
             }
             return Page();
-        }
-
-        public class ToDoBindingModel
-        {
-            [Key]
-            public int Id { get; set; }
-
-            [Required]
-            [StringLength(50)]
-            [Display(Name = "Task description")]
-            public string Description { get; set; }
-
-            public bool IsCompleted { get; set; }
         }
     }
 }

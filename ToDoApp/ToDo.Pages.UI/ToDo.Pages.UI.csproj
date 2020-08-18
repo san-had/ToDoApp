@@ -9,5 +9,4 @@
     <ProjectReference Include="..\ToDo.Extensibility\ToDo.Extensibility.csproj" />
     <ProjectReference Include="..\ToDo.Mvc.UI\ToDo.Mvc.UI.csproj" />
   </ItemGroup>
-
 </Project>
