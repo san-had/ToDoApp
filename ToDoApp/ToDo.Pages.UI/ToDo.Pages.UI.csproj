@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -7,6 +7,5 @@
   <ItemGroup>
     <ProjectReference Include="..\ToDo.Domain\ToDo.Domain.csproj" />
     <ProjectReference Include="..\ToDo.Extensibility\ToDo.Extensibility.csproj" />
-    <ProjectReference Include="..\ToDo.Mvc.UI\ToDo.Mvc.UI.csproj" />
   </ItemGroup>
 </Project>
