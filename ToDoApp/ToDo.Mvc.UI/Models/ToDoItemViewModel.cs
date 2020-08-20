@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ToDo.UI.Models
+namespace ToDo.Mvc.UI.Models
 {
     public class ToDoItemViewModel
     {

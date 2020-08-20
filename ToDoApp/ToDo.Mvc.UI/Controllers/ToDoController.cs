@@ -2,10 +2,10 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ToDo.Extensibility.Dto;
-using ToDo.UI.Models;
-using ToDo.UI.Services;
+using ToDo.Mvc.UI.Models;
+using ToDo.Mvc.UI.Services;
 
-namespace ToDo.UI.Controllers
+namespace ToDo.Mvc.UI.Controllers
 {
     public class ToDoController : Controller
     {

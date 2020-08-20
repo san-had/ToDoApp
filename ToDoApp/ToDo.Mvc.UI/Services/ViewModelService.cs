@@ -2,10 +2,10 @@
 using Microsoft.Extensions.Options;
 using ToDo.Extensibility;
 using ToDo.Extensibility.Dto;
-using ToDo.UI.Converters;
-using ToDo.UI.Models;
+using ToDo.Mvc.UI.Converters;
+using ToDo.Mvc.UI.Models;
 
-namespace ToDo.UI.Services
+namespace ToDo.Mvc.UI.Services
 {
     public class ViewModelService : IViewModelService
     {

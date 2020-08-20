@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ToDo.UI.Models
+namespace ToDo.Mvc.UI.Models
 {
     public class ToDoItemListViewModel
     {

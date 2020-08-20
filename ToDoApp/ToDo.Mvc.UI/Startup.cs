@@ -6,7 +6,7 @@ using Microsoft.Extensions.Hosting;
 using ToDo.Domain.Migrations;
 using ToDo.Extensibility.Dto;
 
-namespace ToDo.UI
+namespace ToDo.Mvc.UI
 {
     public class Startup
     {

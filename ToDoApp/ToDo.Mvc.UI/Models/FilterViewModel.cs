@@ -1,4 +1,4 @@
-﻿namespace ToDo.UI.Models
+﻿namespace ToDo.Mvc.UI.Models
 {
     public class FilterViewModel
     {

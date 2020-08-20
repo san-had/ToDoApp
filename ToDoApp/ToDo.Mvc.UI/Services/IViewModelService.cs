@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using ToDo.Extensibility.Dto;
-using ToDo.UI.Models;
+using ToDo.Mvc.UI.Models;
 
-namespace ToDo.UI.Services
+namespace ToDo.Mvc.UI.Services
 {
     public interface IViewModelService
     {

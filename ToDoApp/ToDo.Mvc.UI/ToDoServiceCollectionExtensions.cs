@@ -3,11 +3,11 @@ using ToDo.Domain.Converters;
 using ToDo.Domain.Database.Providers;
 using ToDo.Domain.Repositories;
 using ToDo.Extensibility;
+using ToDo.Mvc.UI.Converters;
+using ToDo.Mvc.UI.Services;
 using ToDo.Service;
-using ToDo.UI.Converters;
-using ToDo.UI.Services;
 
-namespace ToDo.UI
+namespace ToDo.Mvc.UI
 {
     public static class ToDoServiceCollectionExtensions
     {
