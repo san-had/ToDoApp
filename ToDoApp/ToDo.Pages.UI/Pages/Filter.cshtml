@@ -1,0 +1,83 @@
+﻿@page
+@model ToDo.Pages.UI.Pages.FilterModel
+@{
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Search</title>
+</head>
+<body>
+    <form method="post">
+        Filter:
+        <div class="form-group">
+            <label asp-for="Filter.DescriptionFilter" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Filter.DescriptionFilter" class="form-control" />
+                <span asp-validation-for="Filter.DescriptionFilter" class="text-danger"></span>
+            </div>
+            <br  />
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <div class="checkbox">
+                        <label class="control-label"></label>
+                        <input asp-for="Filter.IsCompletedFilter" /> Completed?
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <div class="checkbox">
+                        <label class="control-label"></label>
+                        <input asp-for="Filter.BoothFilter" /> Both
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    @if (Model.FilteredToDos != null)
+    {
+        if (Model.FilteredToDos.Any())
+        {
+
+            <div class="table-responsive">
+                <table class="table table-striped todo">
+                    <thead>
+                        <tr>
+                            <th>Task</th>
+                            <th>Completed</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var toDo in Model.FilteredToDos)
+                        {
+                            string isCompleted = toDo.IsCompleted ? "Yes" : "No";
+                            <tr>
+                                <td>@toDo.Description</td>
+                                <td>@isCompleted</td>
+                                <td><a asp-area="" asp-page="/Edit" asp-route-id="@toDo.Id" class="btn btn-outline-primary">Edit</a></td>
+                                <td><a asp-action="Delete" asp-route-id="@toDo.Id" class="btn btn-outline-danger" onclick="return confirm('Are you sure?')">Delete</a></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p>Not found</p>
+        }
+    }
+</body>
+</html>
