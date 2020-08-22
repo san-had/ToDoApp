@@ -9,29 +9,66 @@ namespace ToDo.Pages.UI.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly IToDoService toDoService;
+        private const int PageSize = 5;
 
-        public IEnumerable<ToDoDto> AllToDos { get; set; }
+        private readonly IToDoService toDoService;
 
         public IndexModel(IToDoService toDoService)
         {
             this.toDoService = toDoService;
         }
 
+        public IEnumerable<ToDoDto> AllToDos { get; set; }
+
+        [BindProperty]
+        public int PageCount { get; set; }
+
+        [BindProperty]
+        public int CurrentPage { get; set; }
+
         public async Task<ActionResult> OnGet()
         {
-            var filter = new FilterDto
-            {
-                BothFilter = true
-            };
+            int currentPage = 0;
             var paging = new PagingDto
             {
-                PageNumber = 0,
-                PageSize = 100
+                PageNumber = currentPage,
+                PageSize = PageSize
             };
+            await SetPageCount();
 
-            AllToDos = await toDoService.GetAllAsync(filter, paging);
+            AllToDos = await toDoService.GetAllAsync(GetFilter(), paging);
             return Page();
+        }
+
+        public async Task<IActionResult> OnPost()
+        {
+            var paging = new PagingDto
+            {
+                PageNumber = CurrentPage,
+                PageSize = PageSize
+            };
+            //await SetPageCount();
+            AllToDos = await toDoService.GetAllAsync(GetFilter(), paging);
+            return Page();
+        }
+
+        private FilterDto GetFilter() => new FilterDto { BothFilter = true };
+
+        private async Task SetPageCount()
+        {
+            int recordCount = await toDoService.GetAllRecordCountAsync(GetFilter());
+            PageCount = GetPageCount(recordCount, PageSize);
+        }
+
+        private int GetPageCount(int recordCount, int pageSize)
+        {
+            int pageCount = recordCount / pageSize;
+            if (recordCount % pageSize != 0)
+            {
+                pageCount += 1;
+            }
+
+            return pageCount;
         }
     }
 }
