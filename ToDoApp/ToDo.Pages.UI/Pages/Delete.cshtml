@@ -1,0 +1,39 @@
+﻿@page
+@model ToDo.Pages.UI.Pages.DeleteModel
+@{
+    ViewData["Title"] = "Delete Task";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Delete</title>
+</head>
+<body>
+    <h3>@ViewData["Title"]</h3>
+    <form method="post" class="form-horizontal">
+        <div class="form-group">
+            <p>The following task would be deleted:</p>
+            <p>
+                <label asp-for="ToDoItemDeleteModel.Description"></label>:
+                <strong>@Model.ToDoItemDeleteModel.Description</strong>
+            </p>
+            <p>
+                <label asp-for="ToDoItemDeleteModel.IsCompleted"></label>:
+                @{
+                    string isCompleted = Model.ToDoItemDeleteModel.IsCompleted ? "Yes" : "No";
+                }
+                <strong>@isCompleted</strong>
+            </p>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="hidden" asp-for="ToDoItemDeleteModel.Id" />
+                <button type="submit" class="btn btn-primary">Delete</button>
+            </div>
+        </div>
+    </form>
+</body>
+</html>

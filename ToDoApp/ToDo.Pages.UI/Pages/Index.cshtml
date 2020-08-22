@@ -20,9 +20,9 @@
     <td>@toDo.Description</td>
     <td>@isCompleted</td>
     <td><a asp-area="" asp-page="/Edit" asp-route-id="@toDo.Id" class="btn btn-outline-primary">Edit</a></td>
-    <td><a asp-action="Delete" asp-route-id="@toDo.Id" class="btn btn-outline-danger" onclick="return confirm('Are you sure?')">Delete</a></td>
+    <td><a asp-area="" asp-page="/Delete" asp-route-id="@toDo.Id" class="btn btn-outline-danger">Delete</a></td>
 </tr>
-       }
+}
         </tbody>
     </table>
 </div>
