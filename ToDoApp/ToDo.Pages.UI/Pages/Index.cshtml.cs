@@ -2,20 +2,18 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using ToDo.Extensibility;
 using ToDo.Extensibility.Dto;
+using ToDo.Pages.UI.Services;
 
 namespace ToDo.Pages.UI.Pages
 {
     public class IndexModel : PageModel
     {
-        private const int PageSize = 5;
+        private readonly IPaginationService paginationService;
 
-        private readonly IToDoService toDoService;
-
-        public IndexModel(IToDoService toDoService)
+        public IndexModel(IPaginationService paginationService)
         {
-            this.toDoService = toDoService;
+            this.paginationService = paginationService;
         }
 
         public IEnumerable<ToDoDto> AllToDos { get; set; }
@@ -29,46 +27,20 @@ namespace ToDo.Pages.UI.Pages
         public async Task<ActionResult> OnGet()
         {
             int currentPage = 0;
-            var paging = new PagingDto
-            {
-                PageNumber = currentPage,
-                PageSize = PageSize
-            };
-            await SetPageCount();
+            var filter = GetFilter();
 
-            AllToDos = await toDoService.GetAllAsync(GetFilter(), paging);
+            PageCount = await paginationService.GetPageCount(filter);
+
+            AllToDos = await paginationService.GetTodos(filter, currentPage);
             return Page();
         }
 
         public async Task<IActionResult> OnPost()
         {
-            var paging = new PagingDto
-            {
-                PageNumber = CurrentPage,
-                PageSize = PageSize
-            };
-            //await SetPageCount();
-            AllToDos = await toDoService.GetAllAsync(GetFilter(), paging);
+            AllToDos = await paginationService.GetTodos(GetFilter(), CurrentPage);
             return Page();
         }
 
         private FilterDto GetFilter() => new FilterDto { BothFilter = true };
-
-        private async Task SetPageCount()
-        {
-            int recordCount = await toDoService.GetAllRecordCountAsync(GetFilter());
-            PageCount = GetPageCount(recordCount, PageSize);
-        }
-
-        private int GetPageCount(int recordCount, int pageSize)
-        {
-            int pageCount = recordCount / pageSize;
-            if (recordCount % pageSize != 0)
-            {
-                pageCount += 1;
-            }
-
-            return pageCount;
-        }
     }
 }

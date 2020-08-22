@@ -3,6 +3,7 @@ using ToDo.Domain.Converters;
 using ToDo.Domain.Database.Providers;
 using ToDo.Domain.Repositories;
 using ToDo.Extensibility;
+using ToDo.Pages.UI.Services;
 using ToDo.Service;
 
 namespace ToDo.Pages.UI
@@ -15,6 +16,7 @@ namespace ToDo.Pages.UI
             services.AddScoped<IToDoEntityConverter, ToDoEntityConverter>();
             services.AddScoped<IToDoRepository, ToDoRepository>();
             services.AddScoped<IToDoService, ToDoService>();
+            services.AddScoped<IPaginationService, PaginationService>();
             return services;
         }
     }
