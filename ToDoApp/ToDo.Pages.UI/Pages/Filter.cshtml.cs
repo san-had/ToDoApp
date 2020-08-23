@@ -2,24 +2,30 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using ToDo.Extensibility;
 using ToDo.Extensibility.Dto;
+using ToDo.Pages.UI.Services;
 
 namespace ToDo.Pages.UI.Pages
 {
     public class FilterModel : PageModel
     {
-        private readonly IToDoService todoService;
+        private readonly IPaginationService paginationService;
 
-        public FilterModel(IToDoService todoService)
+        public FilterModel(IPaginationService paginationService)
         {
-            this.todoService = todoService;
+            this.paginationService = paginationService;
         }
 
         [BindProperty]
         public FilterBindingModel Filter { get; set; }
 
         public IEnumerable<ToDoDto> FilteredToDos { get; set; }
+
+        [BindProperty]
+        public int PageCount { get; set; }
+
+        [BindProperty]
+        public int CurrentPage { get; set; }
 
         public void OnGet()
         {
@@ -35,14 +41,12 @@ namespace ToDo.Pages.UI.Pages
                     IsCompletedFilter = Filter.IsCompletedFilter,
                     BothFilter = Filter.BoothFilter
                 };
-
-                var paging = new PagingDto
+                PageCount = await paginationService.GetPageCount(filter);
+                if (PageCount < CurrentPage)
                 {
-                    PageNumber = 0,
-                    PageSize = 100
-                };
-
-                FilteredToDos = await todoService.GetAllAsync(filter, paging);
+                    CurrentPage = PageCount - 1;
+                }
+                FilteredToDos = await paginationService.GetTodos(filter, CurrentPage);
             }
             return Page();
         }

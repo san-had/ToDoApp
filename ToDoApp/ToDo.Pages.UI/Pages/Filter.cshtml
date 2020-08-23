@@ -19,7 +19,7 @@
                 <input asp-for="Filter.DescriptionFilter" class="form-control" />
                 <span asp-validation-for="Filter.DescriptionFilter" class="text-danger"></span>
             </div>
-            <br  />
+            <br />
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
                     <div class="checkbox">
@@ -42,42 +42,67 @@
                 </div>
             </div>
         </div>
-    </form>
 
-    @if (Model.FilteredToDos != null)
-    {
-        if (Model.FilteredToDos.Any())
+        @if (Model.FilteredToDos != null)
         {
+            if (Model.FilteredToDos.Any())
+            {
 
-            <div class="table-responsive">
-                <table class="table table-striped todo">
-                    <thead>
-                        <tr>
-                            <th>Task</th>
-                            <th>Completed</th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var toDo in Model.FilteredToDos)
-                        {
-                            string isCompleted = toDo.IsCompleted ? "Yes" : "No";
+                <div class="table-responsive">
+                    <table class="table table-striped todo">
+                        <thead>
                             <tr>
-                                <td>@toDo.Description</td>
-                                <td>@isCompleted</td>
-                                <td><a asp-area="" asp-page="/Edit" asp-route-id="@toDo.Id" class="btn btn-outline-primary">Edit</a></td>
-                                <td><a asp-action="Delete" asp-route-id="@toDo.Id" class="btn btn-outline-danger" onclick="return confirm('Are you sure?')">Delete</a></td>
+                                <th>Task</th>
+                                <th>Completed</th>
+                                <th></th>
+                                <th></th>
                             </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var toDo in Model.FilteredToDos)
+                            {
+                                string isCompleted = toDo.IsCompleted ? "Yes" : "No";
+                                <tr>
+                                    <td>@toDo.Description</td>
+                                    <td>@isCompleted</td>
+                                    <td><a asp-area="" asp-page="/Edit" asp-route-id="@toDo.Id" class="btn btn-outline-primary">Edit</a></td>
+                                    <td><a asp-action="Delete" asp-route-id="@toDo.Id" class="btn btn-outline-danger" onclick="return confirm('Are you sure?')">Delete</a></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <p>Not found</p>
+            }
+        }
+        <table cellpadding="0" cellspacing="0">
+            <tr>
+                @for (int index = 0; index < Model.PageCount; index++)
+                {
+                    <td>
+                        @if (index != Model.CurrentPage)
+                        {
+                            <a href="javascript:PagerClick(@index);">@(index + 1)</a><pre>&nbsp;&nbsp;&nbsp;&nbsp;</pre>
                         }
-                    </tbody>
-                </table>
-            </div>
-        }
-        else
-        {
-            <p>Not found</p>
-        }
-    }
+                        else
+                        {
+                            <span>@(index + 1)</span><pre>&nbsp;&nbsp;&nbsp;&nbsp;</pre>
+                        }
+                    </td>
+                }
+            </tr>
+        </table>
+        <input type="hidden" asp-for="PageCount" />
+        <input type="hidden" asp-for="CurrentPage" />
+        <script type="text/javascript">
+            function PagerClick(index) {
+                document.getElementById("CurrentPage").value = index;
+                document.forms[0].submit();
+            }
+        </script>
+    </form>
 </body>
 </html>

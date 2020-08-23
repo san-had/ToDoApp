@@ -28,9 +28,7 @@ namespace ToDo.Pages.UI.Pages
         {
             int currentPage = 0;
             var filter = GetFilter();
-
             PageCount = await paginationService.GetPageCount(filter);
-
             AllToDos = await paginationService.GetTodos(filter, currentPage);
             return Page();
         }
