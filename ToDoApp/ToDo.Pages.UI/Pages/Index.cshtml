@@ -1,6 +1,9 @@
 ﻿@page
 @model IndexModel
-@{ ViewData["Title"] = "All ToDos"; }
+@{
+    ViewData["Title"] = "All ToDos";
+    int pageNum = Model.CurrentPage + 1;
+}
 
 <div class="table-responsive">
     <table class="table table-striped todo">
@@ -27,28 +30,50 @@
     </table>
 </div>
 <form method="post" class="form-horizontal">
-    <table cellpadding="0" cellspacing="0">
+    <table cellpadding="0" cellspacing="0" class="col-md-6">
         <tr>
-            @for (int index = 0; index < Model.PageCount; index++)
-            {
-                <td>
-                    @if (index != Model.CurrentPage)
-                    {
-                        <a href="javascript:PagerClick(@index);">@(index + 1)</a><pre>&nbsp;&nbsp;&nbsp;&nbsp;</pre>
-                    }
-                    else
-                    {
-                        <span>@(index + 1)</span><pre>&nbsp;&nbsp;&nbsp;&nbsp;</pre>
-                    }
-                </td>
-            }
+            <td>
+                @if (Model.CurrentPage > 0)
+                {
+                    <a href=javascript:PreviousClick()>Previous</a>
+                }
+                else
+                {
+                    <span>Previous</span>
+                }
+
+            <td>Page Number: <strong>@pageNum</strong></td>
+            <td>
+                @if (Model.PageSize - Model.RecordCount > 0)
+                {
+                    <span>Next</span>
+                }
+                else
+                {
+                    <a href=javascript:NextClick()>Next</a>
+                }
+            </td>
         </tr>
     </table>
-    <input type="hidden" asp-for="PageCount" />
     <input type="hidden" asp-for="CurrentPage" />
+    <input type="hidden" asp-for="RecordCount" />
     <script type="text/javascript">
         function PagerClick(index) {
             document.getElementById("CurrentPage").value = index;
+            document.forms[0].submit();
+        }
+        function PreviousClick() {
+            var currentPage = document.getElementById("CurrentPage").value;
+            if (currentPage > 0) {
+                currentPage--;
+                document.getElementById("CurrentPage").value = currentPage;
+                document.forms[0].submit();
+            }
+        }
+        function NextClick() {
+            var currentPage = document.getElementById("CurrentPage").value;
+            currentPage++;
+            document.getElementById("CurrentPage").value = currentPage;
             document.forms[0].submit();
         }
     </script>
